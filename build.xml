@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="test" name="Test">
+ <property location="src" name="src"/>
+ <property location="build" name="build"/>
+ <property location="lib" name="lib"/>
+
+ 
+<target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    </target>
+
+
+<target depends="init" name="test_build">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="${build}" srcdir="${src}">
+		<classpath path="${classpath}">
+			<fileset dir="lib">
+				<include name="**/*.jar"/>
+			</fileset>
+		</classpath>
+	</javac>
+</target>
+
+<target depends="test_build" name="test">
+    <jar basedir="${build}" jarfile="${lib}\test.jar"/>
+</target>
+
+<target depends = "test" name ="run_test">
+	<java classname = "Test">
+		<classpath>
+			<pathelement location="${lib}/test.jar"/>
+			<pathelement location="${lib}/fsuipc.jar"/>
+			<pathelement path="${lib}"/>
+		</classpath>
+	</java>
+</target>
+
+
+
+</project>
