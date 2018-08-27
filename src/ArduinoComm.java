@@ -15,16 +15,18 @@ public class ArduinoComm {
 	
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;
+
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 9600;
 
-	public static void main(String[] args) throws InterruptedException {
-		if(args.length>0) {
-			// example "/dev/cu.usbmodem14231"
-			PORT_NAME = args[0];
-		}
+	public static void main(String[] args) throws Exception {		
+		PropertiesReader properties = new PropertiesReader();
+		initializeArduinoConnection(properties);
 		
-		initializeArduinoConnection();
+		mainLoop();
+	}
+
+	private static void mainLoop() throws Exception {
 		sendData("90\n");
 		Thread.sleep(1000);
 		sendData("1\n");
@@ -39,10 +41,11 @@ public class ArduinoComm {
 		System.exit(0);
 	}
 
-	public static void initializeArduinoConnection() {
+	public static void initializeArduinoConnection(PropertiesReader properties) {
 
 		CommPortIdentifier portId = null;
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
+		PORT_NAME = properties.getPortName();
 
 		// iterate through, looking for the port
 		while (portEnum.hasMoreElements()) {
@@ -80,7 +83,7 @@ public class ArduinoComm {
 		try {
 			output.write(data.getBytes());
 		} catch (IOException e) {
-			System.out.println("Error sending data");
+			System.err.println("Error sending data");
 		}
 	}
 }
