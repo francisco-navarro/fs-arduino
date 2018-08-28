@@ -12,55 +12,61 @@
 Servo myservo[14];
 
 String input;
-String order;
-String param1;
-String param2;
+int count = 0;
+char order;
+char params[5];
 
 void setup() {
   
   Serial.begin(9600);
-  Serial.println("Arduino ready");
+  Serial.println("ready");
 }
 
 void loop() {
   
   if (Serial.available() > 0) {
-    input = Serial.readString();
-    input.trim();
-
-    if(input.length() > 2) {
-      // Captura : ORDEN;PARAM1;PARAM2;
-      order = input.substring(0,3);
-      param1 = input.substring(4,6);
-      param2 = input.substring(7,10);
-  
-      Serial.println("Order "+ order + " param " + param1 + "," + param2);
-
-      // ATT - SERVO ATTACH - N
-      if (order.equalsIgnoreCase("ATT"))
-        attachServo(param1.toInt());
-      // WSR - WRITE SERVO - N - POS
-      if (order.equalsIgnoreCase("WSR"))
-        writeServo(param1.toInt(), param2.toInt());
-    }
+    count = Serial.readBytes(params, 5);
+    order = params[0];
     
-
-    input = "";
+    if(count > 0 && order !='\n') {
+      // attach - a - 97
+      if (order == 'a') {
+        attachServo();
+      } else if (order == 'w') {
+        // w49
+        writeServo();
+      }
+    }
   }
-  delay (100);   
+  delay (50);   
 }
 
-void attachServo(int n) {
-  delay(100);
-  Serial.println("\nAttach servo "+n);
-  myservo[n].attach(n);
+int n = 0;
+int deg = 0;
+void attachServo() {
+  
+  if (count>1) {
+    n = (int) params[1] - 48;
+    myservo[n].attach(n);
+  }
 }
 
-void writeServo(int n, int pos) {
-  myservo[n].write(pos);
+void writeServo() {
+  // w - 4 - ZZ
+  // El segundo parametro es de un byte o dos, empieza enel espacio (32)
+  if (count > 2) {
+    n = (int) params[1] - 48;
+    deg = (int) params[2] - 30;
+    if(count > 3 && params[3] > 30) {
+      deg += (int) params[3] - 30;
+    }
+    Serial.print("write ");
+    Serial.println(deg);
+    myservo[n].write(deg);
+  }
+  
 }
 
 void detachServo(int n) {
-  Serial.println("\nDetach servo "+n);
   myservo[n].detach();
 }
