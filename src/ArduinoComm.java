@@ -30,7 +30,7 @@ public class ArduinoComm implements SerialPortEventListener {
 	private static byte WRITE_TO = 119;
 	private static byte SERVO_OFFSET = 48;
 	
-	private boolean servoStarted = false;
+	private int servoStarted = 0;
 	
 	private PropertiesReader properties;
 	
@@ -51,8 +51,10 @@ public class ArduinoComm implements SerialPortEventListener {
 	private void initializeServos() throws InterruptedException {
 		if (properties.getVerticalSpeed() != null) {
 			sendData("a" + properties.getIAS());
-			Thread.sleep(1000);
+			servoStarted++;
+			Thread.sleep(1800);
 			sendData("a" + properties.getVerticalSpeed());
+			servoStarted++;
 		}
 	}
 
@@ -131,7 +133,7 @@ public class ArduinoComm implements SerialPortEventListener {
 				String inputLine=input.readLine();
 				System.out.println(inputLine);
 				if(inputLine.indexOf("attach") >= 0)
-					servoStarted = true;
+					servoStarted--;
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
@@ -152,7 +154,7 @@ public class ArduinoComm implements SerialPortEventListener {
 				Thread.sleep(1500);
 				initializeServos();
 				
-				while(!servoStarted) {					
+				while(servoStarted > 0) {					
 					Thread.sleep(500);
 				}
 				
