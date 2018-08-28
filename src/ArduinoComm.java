@@ -7,11 +7,13 @@ import java.util.Enumeration;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 
-public class ArduinoComm {
+public class ArduinoComm implements SerialPortEventListener {
 
-	private static OutputStream output = null;
-	private static BufferedReader input;
+	private OutputStream output = null;
+	private BufferedReader input;
 
 	private static SerialPort serialPort;
 	private static String PORT_NAME = "";
@@ -20,40 +22,31 @@ public class ArduinoComm {
 	private static final int TIME_OUT = 2000;
 
 	/** Default bits per second for COM port. */
-	private static final int DATA_RATE = 9600;
+	private static final int DATA_RATE = 19200;
 	
+	private PropertiesReader properties;
 	
-	// try http://www.ardulink.org/to-retrieve-an-ardulink-2-link/
 
 	public static void main(String[] args) throws Exception {		
-		PropertiesReader properties = new PropertiesReader();
+		new ArduinoComm();
+	}
+	
+	ArduinoComm () throws Exception {
+		properties = new PropertiesReader();
 		
 		initializeArduinoConnection(properties);
-		initializeServos(properties);
 		
-		mainLoop(properties);
+		MainLoop loop = new MainLoop();
+		new Thread(loop).start();
 	}
 
-	private static void initializeServos(PropertiesReader properties) throws InterruptedException {
+	private void initializeServos() throws InterruptedException {
 		if (properties.getVerticalSpeed() != null) {
-			sendData("ATT;" + properties.getVerticalSpeed());
-			Thread.sleep(200);
+			sendData("a" + properties.getVerticalSpeed());
 		}
 	}
 
-	private static void mainLoop(PropertiesReader properties) throws Exception {
-		sendData("WSR;"+properties.getVerticalSpeed()+";90");
-		Thread.sleep(200);
-		sendData("WSR;"+properties.getVerticalSpeed()+";002");
-		Thread.sleep(200);
-		sendData("WSR;"+properties.getVerticalSpeed()+";90");
-		Thread.sleep(200);
-		sendData("WSR;"+properties.getVerticalSpeed()+";180");
-		Thread.sleep(1200);
-		System.exit(0);
-	}
-
-	public static void initializeArduinoConnection(PropertiesReader properties) {
+	public void initializeArduinoConnection(PropertiesReader properties) throws Exception {
 
 		CommPortIdentifier portId = null;
 		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
@@ -87,31 +80,90 @@ public class ArduinoComm {
 
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			
-			Thread.sleep(500);
-			read();
+			// add event listeners
+			serialPort.addEventListener(this);
+			serialPort.notifyOnDataAvailable(true);
+//						
+			Thread.sleep(400);
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			throw e;
 		}
 	}
 	
-	private static void sendData(String data){
+	private void sendData(String data) throws InterruptedException{
 		 
 		try {
 			output.write((data + "\n").getBytes());
-			read();
-			
 		} catch (IOException e) {
 			System.err.println("Error sending data");
 		}
+//		try {
+//			String inputLine=input.readLine();
+//			if (inputLine.length() > 2)
+//				System.out.println(inputLine);
+//		} catch (Exception e) {
+//			System.err.println(e.toString());
+//		}
 	}
 	
-	private synchronized static void read() {
-		try {
-			String inputLine=input.readLine();
-			System.out.println(inputLine);
-		} catch (Exception e) {
-			System.err.println(e.toString());
+	public synchronized void close() {
+		if (serialPort != null) {
+			serialPort.removeEventListener();
+			serialPort.close();
 		}
 	}
+	
+	public synchronized void serialEvent(SerialPortEvent oEvent) {
+		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+			try {
+				String inputLine=input.readLine();
+				System.out.println(inputLine);
+			} catch (Exception e) {
+				System.err.println(e.toString());
+			}
+		}
+		// Ignore all the other eventTypes, but you should consider the other ones.
+	}
+	
+
+	class MainLoop implements Runnable {
+		
+		boolean keep = true;
+		
+		@Override
+		public void run() {
+
+			try {
+				Thread.sleep(1500);
+				initializeServos();
+				Thread.sleep(500);
+				
+				while(keep) {
+					sendData("w42");
+					Thread.sleep(40);
+					sendData("w4kk");
+					Thread.sleep(40);
+					sendData("w42");
+					Thread.sleep(40);
+					sendData("w4kk");
+					Thread.sleep(40);
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public void stop() {
+			keep = false;
+		}
+		
+	}
+
 }
+
+
+

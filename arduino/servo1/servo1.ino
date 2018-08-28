@@ -18,7 +18,7 @@ char params[5];
 
 void setup() {
   
-  Serial.begin(9600);
+  Serial.begin(19200);
   Serial.println("ready");
 }
 
@@ -35,10 +35,12 @@ void loop() {
       } else if (order == 'w') {
         // w49
         writeServo();
+      } else {
+        Serial.println("_");
       }
     }
   }
-  delay (50);   
+  delay (10);   
 }
 
 int n = 0;
@@ -48,6 +50,7 @@ void attachServo() {
   if (count>1) {
     n = (int) params[1] - 48;
     myservo[n].attach(n);
+    Serial.println("servo attached");
   }
 }
 
