@@ -39,5 +39,9 @@ public class PropertiesReader {
 	public String getVerticalSpeed () {
 		return prop.getProperty("vertical.speed.servo");
 	}
+	
+	public String getIAS () {
+		return prop.getProperty("air.speed.servo");
+	}
 
 }

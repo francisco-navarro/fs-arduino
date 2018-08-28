@@ -24,6 +24,14 @@ public class ArduinoComm implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 19200;
 	
+	private static final int WRITE_TIMEOUT = 40;
+	
+	// word write to arduino
+	private static byte WRITE_TO = 119;
+	private static byte SERVO_OFFSET = 48;
+	
+	private boolean servoStarted = false;
+	
 	private PropertiesReader properties;
 	
 
@@ -42,6 +50,8 @@ public class ArduinoComm implements SerialPortEventListener {
 
 	private void initializeServos() throws InterruptedException {
 		if (properties.getVerticalSpeed() != null) {
+			sendData("a" + properties.getIAS());
+			Thread.sleep(1000);
 			sendData("a" + properties.getVerticalSpeed());
 		}
 	}
@@ -83,7 +93,7 @@ public class ArduinoComm implements SerialPortEventListener {
 			// add event listeners
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
-//						
+					
 			Thread.sleep(400);
 
 		} catch (Exception e) {
@@ -120,6 +130,8 @@ public class ArduinoComm implements SerialPortEventListener {
 			try {
 				String inputLine=input.readLine();
 				System.out.println(inputLine);
+				if(inputLine.indexOf("attach") >= 0)
+					servoStarted = true;
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
@@ -127,6 +139,7 @@ public class ArduinoComm implements SerialPortEventListener {
 		// Ignore all the other eventTypes, but you should consider the other ones.
 	}
 	
+
 
 	class MainLoop implements Runnable {
 		
@@ -138,23 +151,68 @@ public class ArduinoComm implements SerialPortEventListener {
 			try {
 				Thread.sleep(1500);
 				initializeServos();
-				Thread.sleep(500);
+				
+				while(!servoStarted) {					
+					Thread.sleep(500);
+				}
 				
 				while(keep) {
-					sendData("w42");
-					Thread.sleep(40);
-					sendData("w4kk");
-					Thread.sleep(40);
-					sendData("w42");
-					Thread.sleep(40);
-					sendData("w4kk");
-					Thread.sleep(40);
+					
+					
+					writeServo(4,180);
+					
+					Thread.sleep(1);
+					
+					writeServo(5,177);
+					
+					Thread.sleep(150);
+					
+					writeServo(4,120);
+					
+					Thread.sleep(150);
+					
+					writeServo(4,90);
+					
+					Thread.sleep(150);
+					
+					writeServo(5,97);
+					
+					Thread.sleep(1);
+					
+					writeServo(4,30);
+					
+					Thread.sleep(150);
+					
+					writeServo(4,90);
+					
+					Thread.sleep(150);
+					
+					writeServo(4,120);
+					
+					Thread.sleep(1);
+					
+					writeServo(5,127);
+					
+					Thread.sleep(50);
 				}
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		public void writeServo (int servo, int pos) throws Exception {
+			byte[] data = {
+					WRITE_TO,
+					(byte) (servo + SERVO_OFFSET),
+					(byte)(pos % 91 + 30),
+					(byte)(pos > 91 ? 91 + 30 : 0)
+			};
+
+			
+			sendData(new String(data));
+			Thread.sleep(WRITE_TIMEOUT);
 		}
 		
 		public void stop() {
