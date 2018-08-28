@@ -33,7 +33,11 @@ public class PropertiesReader {
 	}
 
 	public String getPortName() {
-		return prop.getProperty("PORT_NAME");
+		return prop.getProperty("port.name");
+	}
+	
+	public String getVerticalSpeed () {
+		return prop.getProperty("vertical.speed.servo");
 	}
 
 }

@@ -1,5 +1,7 @@
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
 
@@ -9,6 +11,7 @@ import gnu.io.SerialPort;
 public class ArduinoComm {
 
 	private static OutputStream output = null;
+	private static BufferedReader input;
 
 	private static SerialPort serialPort;
 	private static String PORT_NAME = "";
@@ -18,26 +21,35 @@ public class ArduinoComm {
 
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 9600;
+	
+	
+	// try http://www.ardulink.org/to-retrieve-an-ardulink-2-link/
 
 	public static void main(String[] args) throws Exception {		
 		PropertiesReader properties = new PropertiesReader();
-		initializeArduinoConnection(properties);
 		
-		mainLoop();
+		initializeArduinoConnection(properties);
+		initializeServos(properties);
+		
+		mainLoop(properties);
 	}
 
-	private static void mainLoop() throws Exception {
-		sendData("90\n");
-		Thread.sleep(1000);
-		sendData("1\n");
-		Thread.sleep(1300);
-		sendData("2\n");
-		Thread.sleep(1300);
-		sendData("90\n");
-		Thread.sleep(1300);
-		sendData("180\n");
-		Thread.sleep(1000);
-		sendData("1\n");
+	private static void initializeServos(PropertiesReader properties) throws InterruptedException {
+		if (properties.getVerticalSpeed() != null) {
+			sendData("ATT;" + properties.getVerticalSpeed());
+			Thread.sleep(200);
+		}
+	}
+
+	private static void mainLoop(PropertiesReader properties) throws Exception {
+		sendData("WSR;"+properties.getVerticalSpeed()+";90");
+		Thread.sleep(200);
+		sendData("WSR;"+properties.getVerticalSpeed()+";002");
+		Thread.sleep(200);
+		sendData("WSR;"+properties.getVerticalSpeed()+";90");
+		Thread.sleep(200);
+		sendData("WSR;"+properties.getVerticalSpeed()+";180");
+		Thread.sleep(1200);
 		System.exit(0);
 	}
 
@@ -73,6 +85,11 @@ public class ArduinoComm {
 			// open the streams
 			output = serialPort.getOutputStream();
 
+			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+			
+			Thread.sleep(500);
+			read();
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -81,9 +98,20 @@ public class ArduinoComm {
 	private static void sendData(String data){
 		 
 		try {
-			output.write(data.getBytes());
+			output.write((data + "\n").getBytes());
+			read();
+			
 		} catch (IOException e) {
 			System.err.println("Error sending data");
+		}
+	}
+	
+	private synchronized static void read() {
+		try {
+			String inputLine=input.readLine();
+			System.out.println(inputLine);
+		} catch (Exception e) {
+			System.err.println(e.toString());
 		}
 	}
 }

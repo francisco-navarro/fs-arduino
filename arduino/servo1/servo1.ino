@@ -34,7 +34,7 @@ void loop() {
       param1 = input.substring(4,6);
       param2 = input.substring(7,10);
   
-      //Serial.println("Order "+ order + " param " + param1 + "," + param2);
+      Serial.println("Order "+ order + " param " + param1 + "," + param2);
 
       // ATT - SERVO ATTACH - N
       if (order.equalsIgnoreCase("ATT"))
@@ -47,11 +47,11 @@ void loop() {
 
     input = "";
   }
-  delay (400);   
+  delay (100);   
 }
 
 void attachServo(int n) {
-  delay(500);
+  delay(100);
   Serial.println("\nAttach servo "+n);
   myservo[n].attach(n);
 }
