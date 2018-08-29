@@ -6,25 +6,27 @@ import com.pakonat.FSUI;
 public class Servo extends Thing {
 
 	/** Order write servo arduino */
-	private static byte WRITE_TO = 119;
+	protected static byte WRITE_TO = 119;
 	
 	/** Order attach servo arduino */
-	private static String ATTACH = "a";
+	protected static String ATTACH = "a";
 
 	/** Bytes to subtract to servo number (for arduino interpeter) */
-	private static byte SERVO_OFFSET = 48;
+	protected static byte SERVO_OFFSET = 48;
 	
-	private static final int WRITE_TIMEOUT = 5;
+	protected static final int WRITE_TIMEOUT = 5;
 	
-	private int port;
+	protected int port;
 	
-	private int max, min;
+	protected int max, min;
 	
-	private int memory;
+	protected int maxServo = 180;
 	
-	private float value = 0;
+	protected int memory;
 	
-	private String name;
+	protected float value = 0;
+	
+	protected String name;
 	
 	
 	public Servo(Arduino arduino, FSUI fsui, String name) {
