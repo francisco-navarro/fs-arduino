@@ -25,6 +25,7 @@ void setup() {
 void loop() {
   
   if (Serial.available() > 0) {
+    // Serial.readBytesUntil(character, buffer, length)
     count = Serial.readBytes(params, 5);
     order = params[0];
     
