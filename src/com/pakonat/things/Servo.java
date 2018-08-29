@@ -9,7 +9,7 @@ public class Servo extends Thing {
 	private static byte WRITE_TO = 119;
 	
 	/** Order attach servo arduino */
-	private static byte ATTACH = 'a';
+	private static String ATTACH = "a";
 
 	/** Bytes to subtract to servo number (for arduino interpeter) */
 	private static byte SERVO_OFFSET = 48;
@@ -26,10 +26,9 @@ public class Servo extends Thing {
 	
 	private String name;
 	
-	private FSUI fsui;
 	
 	public Servo(Arduino arduino, FSUI fsui, String name) {
-		super(arduino);
+		super(arduino, fsui);
 		this.name = name;
 		String port = arduino.getProperty(name + ".servo");
 		String max = arduino.getProperty(name + ".max");
@@ -49,17 +48,16 @@ public class Servo extends Thing {
 
 	@Override
 	public void init() throws Exception {
-		byte[] data = {ATTACH,  (byte)this.port};
-		sendData(new String(data));
+		sendData(new String(ATTACH + this.port));
 		Thread.sleep(WRITE_TIMEOUT);
 	}
 
 	@Override
 	public void update() throws Exception {
-		long actual = fsui.read(this.memory);
+		long actual = fsui.readInt(memory);
 		// En value guardo 0.####
 		value = (float)(actual - min) / (max - min);
-		writeServo(Math.round(180*value));
+		writeServo(180 - Math.round(180*value));
 	}
 
 	public void writeServo (int pos) throws Exception {

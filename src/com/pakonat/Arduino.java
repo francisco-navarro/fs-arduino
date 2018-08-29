@@ -69,13 +69,15 @@ public class Arduino implements SerialPortEventListener {
 			output = serialPort.getOutputStream();
 
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-			emptyInput(input);
+			Thread.sleep(200);
 			
 			// add event listeners
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
 					
-			Thread.sleep(400);
+			Thread.sleep(1000);
+			emptyInput(input);
+			sendData(" ");
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -98,17 +100,22 @@ public class Arduino implements SerialPortEventListener {
 		throw new Exception("Could not find COM port.");
 	}
 
-	private void emptyInput (BufferedReader input) throws IOException {
-		int count = 1;
-		char buff[] = new char[2048];
-		count = input.read(buff);
-		
-		System.out.print("Empty COM buffer..");
-		
-		while(count >= 2048) {
-			System.out.print(".");
+	private void emptyInput (BufferedReader input) {
+		try {
+			int count = 1;
+			char buff[] = new char[2048];
 			count = input.read(buff);
+			
+			System.out.print("Empty COM buffer..");
+			
+			while(count >= 2048) {
+				System.out.print(".");
+				count = input.read(buff);
+			}
+		}catch (Exception e) {
+			System.err.println("WARN: Error trying to empty buffer");
 		}
+		
 	}
 	
 	public synchronized void sendData(String data) throws InterruptedException{

@@ -1,13 +1,17 @@
 package com.pakonat.things;
 
 import com.pakonat.Arduino;
+import com.pakonat.FSUI;
 
 public abstract class Thing {
 	
-	Arduino arduino;
+	protected Arduino arduino;
+
+	protected FSUI fsui;
 	
-	Thing (Arduino arduino) {
+	Thing (Arduino arduino, FSUI fsui) {
 		this.arduino = arduino;
+		this.fsui = fsui;
 	}
 	
 	protected synchronized void sendData(String data) throws InterruptedException{
