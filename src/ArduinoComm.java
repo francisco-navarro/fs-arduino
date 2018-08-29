@@ -24,7 +24,7 @@ public class ArduinoComm implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 115200;
 	
-	private static final int WRITE_TIMEOUT = 3;
+	private static final int WRITE_TIMEOUT = 5;
 	
 	// word write to arduino
 	private static byte WRITE_TO = 119;
@@ -52,7 +52,6 @@ public class ArduinoComm implements SerialPortEventListener {
 		if (properties.getVerticalSpeed() != null) {
 			sendData("a" + properties.getIAS());
 			servoStarted++;
-			Thread.sleep(400);
 			sendData("a" + properties.getVerticalSpeed());
 			servoStarted++;
 		}
@@ -91,6 +90,7 @@ public class ArduinoComm implements SerialPortEventListener {
 			output = serialPort.getOutputStream();
 
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+			emptyInput(input);
 			
 			// add event listeners
 			serialPort.addEventListener(this);
@@ -101,6 +101,20 @@ public class ArduinoComm implements SerialPortEventListener {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			throw e;
+		}
+	}
+	
+	private void emptyInput (BufferedReader input) throws IOException {
+		int count = 1;
+		char buff[] = new char[2048];
+		count = input.read(buff);
+		
+		System.out.print("Empty COM buffer..");
+		
+		while(count >= 2048) {
+			System.out.print(".");
+			count = input.read(buff);
+			
 		}
 	}
 	
