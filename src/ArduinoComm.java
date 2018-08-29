@@ -22,9 +22,9 @@ public class ArduinoComm implements SerialPortEventListener {
 	private static final int TIME_OUT = 2000;
 
 	/** Default bits per second for COM port. */
-	private static final int DATA_RATE = 19200;
+	private static final int DATA_RATE = 115200;
 	
-	private static final int WRITE_TIMEOUT = 40;
+	private static final int WRITE_TIMEOUT = 3;
 	
 	// word write to arduino
 	private static byte WRITE_TO = 119;
@@ -52,7 +52,7 @@ public class ArduinoComm implements SerialPortEventListener {
 		if (properties.getVerticalSpeed() != null) {
 			sendData("a" + properties.getIAS());
 			servoStarted++;
-			Thread.sleep(1800);
+			Thread.sleep(400);
 			sendData("a" + properties.getVerticalSpeed());
 			servoStarted++;
 		}
@@ -111,13 +111,6 @@ public class ArduinoComm implements SerialPortEventListener {
 		} catch (IOException e) {
 			System.err.println("Error sending data");
 		}
-//		try {
-//			String inputLine=input.readLine();
-//			if (inputLine.length() > 2)
-//				System.out.println(inputLine);
-//		} catch (Exception e) {
-//			System.err.println(e.toString());
-//		}
 	}
 	
 	public synchronized void close() {
@@ -138,7 +131,6 @@ public class ArduinoComm implements SerialPortEventListener {
 				System.err.println(e.toString());
 			}
 		}
-		// Ignore all the other eventTypes, but you should consider the other ones.
 	}
 	
 
@@ -162,44 +154,21 @@ public class ArduinoComm implements SerialPortEventListener {
 					
 					
 					writeServo(4,180);
+					writeServo(5,0);
+					Thread.sleep(500);
 					
-					Thread.sleep(1);
+					for (int i=0; i<180; i++) {
+						writeServo(4,180 - i);
+						writeServo(5,0 + i);
+					}
+					for (int i=0; i<180; i++) {
+						writeServo(5,180 - i);
+						writeServo(4,0 + i);
+					}
 					
-					writeServo(5,177);
-					
-					Thread.sleep(150);
-					
-					writeServo(4,120);
-					
-					Thread.sleep(150);
-					
-					writeServo(4,90);
-					
-					Thread.sleep(150);
-					
-					writeServo(5,97);
-					
-					Thread.sleep(1);
-					
-					writeServo(4,30);
-					
-					Thread.sleep(150);
-					
-					writeServo(4,90);
-					
-					Thread.sleep(150);
-					
-					writeServo(4,120);
-					
-					Thread.sleep(1);
-					
-					writeServo(5,127);
-					
-					Thread.sleep(50);
 				}
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -209,7 +178,7 @@ public class ArduinoComm implements SerialPortEventListener {
 					WRITE_TO,
 					(byte) (servo + SERVO_OFFSET),
 					(byte)(pos % 91 + 30),
-					(byte)(pos > 91 ? 91 + 30 : 0)
+					(byte)(pos >= 91 ? 91 + 30 : 0)
 			};
 
 			

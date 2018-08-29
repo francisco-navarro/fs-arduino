@@ -18,7 +18,7 @@ char params[5];
 
 void setup() {
   
-  Serial.begin(19200);
+  Serial.begin(115200);
   Serial.println("ready");
 }
 
@@ -26,7 +26,7 @@ void loop() {
   
   if (Serial.available() > 0) {
     // Serial.readBytesUntil(character, buffer, length)
-    count = Serial.readBytes(params, 5);
+    count = Serial.readBytesUntil('\n', params, 4);
     order = params[0];
     
     if(count > 0 && order !='\n') {
@@ -40,7 +40,7 @@ void loop() {
       Serial.println("_");
     }
   }
-  delay (50);   
+  delay (1);
 }
 
 
@@ -69,9 +69,7 @@ void writeServo() {
     Serial.print(" -> ");
     Serial.println(deg);
     myservo[n].write(deg);
-    delay (10);   
   }
-  
 }
 
 void detachServo(int n) {
