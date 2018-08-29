@@ -1,9 +1,12 @@
+package test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
+
+import com.pakonat.util.PropertiesReader;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -119,7 +122,6 @@ public class ArduinoComm implements SerialPortEventListener {
 	}
 	
 	private void sendData(String data) throws InterruptedException{
-		 
 		try {
 			output.write((data + "\n").getBytes());
 		} catch (IOException e) {

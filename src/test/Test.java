@@ -1,3 +1,4 @@
+package test;
 import com.flightsim.fsuipc.*;
 
 
@@ -99,6 +100,7 @@ public class Test
 	FSFlightSim sim = new FSFlightSim();
 	System.out.println("name " + sim.StartSituationName());
 	}
+	
 	public static void main(String s[]) 
 	{
 	System.out.println("Running tests");

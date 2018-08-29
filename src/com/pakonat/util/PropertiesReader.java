@@ -1,3 +1,4 @@
+package com.pakonat.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,7 +13,7 @@ public class PropertiesReader {
 	
 	private Properties prop;
 	
-	PropertiesReader() throws Exception {
+	public PropertiesReader() throws Exception {
 		File f = new File(FILENAME);
 		
 		if (!f.exists()) {
