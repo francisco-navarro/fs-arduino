@@ -8,8 +8,20 @@
 */
 
 #include <Servo.h>
+#include <Math.h>
+
 
 Servo myservo[14];
+
+int stepper[14];
+int motorStepM [4][4] =
+{
+   {1, 0, 0, 0},
+  {0, 1, 0, 0},
+  {0, 0, 1, 0},
+  {0, 0, 0, 1}
+};
+ 
 
 String input;
 int count = 0;
@@ -30,12 +42,12 @@ void loop() {
     order = params[0];
     
     if(count > 0 && order !='\n') {
-      // attach - a - 97
       if (order == 'a') {
         attachServo();
       } else if (order == 'w') {
-        // w49
         writeServo();
+      } else if (order == 's') {
+        motorStep();
       }
       Serial.println("_");
     }
@@ -74,4 +86,56 @@ void writeServo() {
 
 void detachServo(int n) {
   myservo[n].detach();
+}
+
+void motorStep() {
+  int nStepper = (int) params[1] - 48;
+  // el 0 está en 48
+  int n = (int) params[2] - 64;
+  int factor = 2;
+  
+  if (!stepper[nStepper]) {
+    pinMode(nStepper, OUTPUT);
+    pinMode(nStepper+1, OUTPUT);
+    pinMode(nStepper+2, OUTPUT);
+    pinMode(nStepper+3, OUTPUT);
+  }
+
+  stepper[nStepper] += n * factor;
+  Serial.print("write step motor");
+  Serial.print(nStepper);
+  Serial.print(" ");
+  Serial.print(n*factor);
+  Serial.println(" steps");
+
+  // una vuelta 8510 steps - byte c
+  for(int s = 0; s<abs(n*factor); s++)
+    n>0 ? stepForward(nStepper) : stepBackward(nStepper);
+     
+  digitalWrite(nStepper, 0);
+  digitalWrite(nStepper+1, 0);
+  digitalWrite(nStepper+2, 0);
+  digitalWrite(nStepper+3, 0);
+}
+
+void stepForward(int nStepper) {
+  for (int i = 0; i < 4; i++)
+      {
+        digitalWrite(nStepper, motorStepM[i][0]);
+        digitalWrite(nStepper+1, motorStepM[i][1]);
+        digitalWrite(nStepper+2, motorStepM[i][2]);
+        digitalWrite(nStepper+3, motorStepM[i][3]);
+        delay(2);
+      }
+}
+
+void stepBackward(int nStepper) {
+  for (int i = 0; i < 4; i++)
+      {
+        digitalWrite(nStepper, motorStepM[i][3]);
+        digitalWrite(nStepper+1, motorStepM[i][2]);
+        digitalWrite(nStepper+2, motorStepM[i][1]);
+        digitalWrite(nStepper+3, motorStepM[i][0]);
+        delay(2);
+      }
 }
