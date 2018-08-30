@@ -8,6 +8,9 @@ public abstract class Thing {
 	protected Arduino arduino;
 
 	protected FSUI fsui;
+
+	/** Bytes to subtract to servo number (for arduino interpeter) */
+	protected static byte SERVO_OFFSET = 48;
 	
 	Thing (Arduino arduino, FSUI fsui) {
 		this.arduino = arduino;

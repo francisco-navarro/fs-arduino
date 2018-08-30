@@ -10,9 +10,6 @@ public class Servo extends Thing {
 	
 	/** Order attach servo arduino */
 	protected static String ATTACH = "a";
-
-	/** Bytes to subtract to servo number (for arduino interpeter) */
-	protected static byte SERVO_OFFSET = 48;
 	
 	protected static final int WRITE_TIMEOUT = 5;
 	
@@ -32,7 +29,7 @@ public class Servo extends Thing {
 	public Servo(Arduino arduino, FSUI fsui, String name) {
 		super(arduino, fsui);
 		this.name = name;
-		String port = arduino.getProperty(name + ".servo");
+		String port = arduino.getProperty(name + ".pin");
 		String max = arduino.getProperty(name + ".max");
 		String min = arduino.getProperty(name + ".min");
 		String memory = arduino.getProperty(name + ".memory");

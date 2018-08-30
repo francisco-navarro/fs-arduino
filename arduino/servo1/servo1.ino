@@ -110,7 +110,7 @@ void motorStep() {
 
   // una vuelta 8510 steps - byte c
   for(int s = 0; s<abs(n*factor); s++)
-    n>0 ? stepForward(nStepper) : stepBackward(nStepper);
+    n<0 ? stepForward(nStepper) : stepBackward(nStepper);
      
   digitalWrite(nStepper, 0);
   digitalWrite(nStepper+1, 0);
