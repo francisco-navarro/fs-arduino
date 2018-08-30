@@ -6,30 +6,31 @@ import com.pakonat.FSUI;
 public class Servo extends Thing {
 
 	/** Order write servo arduino */
-	private static byte WRITE_TO = 119;
+	protected static byte WRITE_TO = 119;
 	
 	/** Order attach servo arduino */
-	private static byte ATTACH = 'a';
+	protected static String ATTACH = "a";
 
 	/** Bytes to subtract to servo number (for arduino interpeter) */
-	private static byte SERVO_OFFSET = 48;
+	protected static byte SERVO_OFFSET = 48;
 	
-	private static final int WRITE_TIMEOUT = 5;
+	protected static final int WRITE_TIMEOUT = 5;
 	
-	private int port;
+	protected int port;
 	
-	private int max, min;
+	protected int max, min;
 	
-	private int memory;
+	protected int maxServo = 180;
 	
-	private float value = 0;
+	protected int memory;
 	
-	private String name;
+	protected float value = 0;
 	
-	private FSUI fsui;
+	protected String name;
+	
 	
 	public Servo(Arduino arduino, FSUI fsui, String name) {
-		super(arduino);
+		super(arduino, fsui);
 		this.name = name;
 		String port = arduino.getProperty(name + ".servo");
 		String max = arduino.getProperty(name + ".max");
@@ -49,17 +50,16 @@ public class Servo extends Thing {
 
 	@Override
 	public void init() throws Exception {
-		byte[] data = {ATTACH,  (byte)this.port};
-		sendData(new String(data));
+		sendData(new String(ATTACH + this.port));
 		Thread.sleep(WRITE_TIMEOUT);
 	}
 
 	@Override
 	public void update() throws Exception {
-		long actual = fsui.read(this.memory);
+		long actual = fsui.readInt(memory);
 		// En value guardo 0.####
 		value = (float)(actual - min) / (max - min);
-		writeServo(Math.round(180*value));
+		writeServo(180 - Math.round(180*value));
 	}
 
 	public void writeServo (int pos) throws Exception {

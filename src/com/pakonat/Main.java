@@ -1,5 +1,7 @@
 package com.pakonat;
 
+import com.pakonat.avionics.IAS;
+import com.pakonat.avionics.VerticalSpeed;
 import com.pakonat.things.Servo;
 import com.pakonat.util.PropertiesReader;
 
@@ -18,7 +20,8 @@ public class Main {
 		arduino = new Arduino(prop);
 		fsui = new FSUI(prop);
 		
-		new Servo(arduino, fsui, "ias");
+		new IAS(arduino, fsui);
+		new VerticalSpeed(arduino, fsui);
 		
 		arduino.start();
 	}

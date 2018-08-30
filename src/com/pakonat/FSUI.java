@@ -23,8 +23,13 @@ public class FSUI {
 		}
 	}
 	
-	public Long read(int position) {
-		return fsui.getLong(0x0898);
+	public long readLong(int position) {
+		return fsui.getLong(position);
 	}
+	
+	public int readInt(int position) {
+		return fsui.getInt(position);
+	}
+
 
 }

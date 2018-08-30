@@ -52,7 +52,7 @@ void loop() {
       Serial.println("_");
     }
   }
-  delay (1);
+  delay (2);
 }
 
 
