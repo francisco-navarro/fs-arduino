@@ -13,7 +13,7 @@
 
 Servo myservo[14];
 
-int stepper[14];
+float stepper[14];
 int motorStepM [4][4] =
 {
    {1, 0, 0, 0},
@@ -90,9 +90,13 @@ void detachServo(int n) {
 
 void motorStep() {
   int nStepper = (int) params[1] - 48;
-  // el 0 está en 48
+  // el 0 está en 48 
+  // Cada numero son 100 pies
   int n = (int) params[2] - 64;
-  int factor = 2;
+  // 1000 pies - 53 pasos
+  float onehundred = 52.8;
+  // 100 pies
+  float factor = onehundred/10.0;
   
   if (!stepper[nStepper]) {
     pinMode(nStepper, OUTPUT);
@@ -105,13 +109,15 @@ void motorStep() {
   Serial.print("write step motor");
   Serial.print(nStepper);
   Serial.print(" ");
+  Serial.print(n * 100);
+  Serial.print("pies - ");
   Serial.print(n*factor);
   Serial.println(" steps");
 
-  // una vuelta 8510 steps - byte c
+  //una vuelta 264 steps - byte c
   for(int s = 0; s<abs(n*factor); s++)
     n<0 ? stepForward(nStepper) : stepBackward(nStepper);
-     
+
   digitalWrite(nStepper, 0);
   digitalWrite(nStepper+1, 0);
   digitalWrite(nStepper+2, 0);
