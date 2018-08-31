@@ -10,6 +10,10 @@ public class FSUI {
 	private FSFlightSim sim;
 	private FSUIPC fsui;
 	private int ret = 0;
+	
+	public FSUI() {
+		
+	}
 
 	public FSUI(PropertiesReader prop) {
 		ret = fsuipc_wrapper.Open(fsuipc_wrapper.SIM_ANY);

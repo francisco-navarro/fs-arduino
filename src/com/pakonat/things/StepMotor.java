@@ -18,7 +18,7 @@ public class StepMotor extends Thing {
 	
 	protected String name;
 
-	StepMotor(Arduino arduino, FSUI fsui, String name) {
+	protected StepMotor(Arduino arduino, FSUI fsui, String name) {
 		super(arduino, fsui);
 		position = 0;
 		
