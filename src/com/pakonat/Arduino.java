@@ -38,6 +38,7 @@ public class Arduino implements SerialPortEventListener {
 	private ArrayList<Thing> things = new ArrayList<>();
 	
 	private MainLoop loop;
+	private InputStreamReader inputStream;
 	
 	public Arduino(PropertiesReader prop) throws Exception {
 		properties = prop;
@@ -68,7 +69,8 @@ public class Arduino implements SerialPortEventListener {
 			// open the streams
 			output = serialPort.getOutputStream();
 
-			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+			inputStream = new InputStreamReader(serialPort.getInputStream());
+			input = new BufferedReader(inputStream);
 			Thread.sleep(200);
 			
 			// add event listeners
@@ -76,7 +78,9 @@ public class Arduino implements SerialPortEventListener {
 			serialPort.notifyOnDataAvailable(true);
 					
 			Thread.sleep(1000);
-			emptyInput(input);
+			if (input.ready()) {
+			 emptyInput(input);
+			}
 			sendData(" ");
 
 		} catch (Exception e) {
@@ -105,7 +109,6 @@ public class Arduino implements SerialPortEventListener {
 			int count = 1;
 			char buff[] = new char[2048];
 			count = input.read(buff);
-			
 			System.out.print("Empty COM buffer..");
 			
 			while(count >= 2048) {

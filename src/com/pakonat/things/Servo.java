@@ -10,9 +10,9 @@ public class Servo extends Thing {
 	
 	/** Order attach servo arduino */
 	protected static String ATTACH = "a";
-	
-	protected static final int WRITE_TIMEOUT = 5;
-	
+
+	private static final long WRITE_TIMEOUT = 5;
+	 
 	protected int port;
 	
 	protected int max, min;

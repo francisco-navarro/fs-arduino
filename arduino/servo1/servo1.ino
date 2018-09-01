@@ -104,15 +104,20 @@ void motorStep() {
     pinMode(nStepper+2, OUTPUT);
     pinMode(nStepper+3, OUTPUT);
   }
-
-  stepper[nStepper] += n * factor;
-  Serial.print("write step motor");
+  
+  Serial.print("write stepmotor_");
   Serial.print(nStepper);
-  Serial.print(" ");
+  Serial.print(" | ");
+  Serial.print(stepper[nStepper]);
+  stepper[nStepper] += n * 100;
+  Serial.print(" | ");
+  Serial.print(stepper[nStepper]);
+  Serial.print(" | ");
   Serial.print(n * 100);
-  Serial.print("pies - ");
+  Serial.print("pies");
+  Serial.print(" | ");
   Serial.print(n*factor);
-  Serial.println(" steps");
+  Serial.print(" pasos");
 
   //una vuelta 264 steps - byte c
   for(int s = 0; s<abs(n*factor); s++)

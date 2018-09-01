@@ -38,7 +38,7 @@ public class StepMotor extends Thing {
 
 	@Override
 	public void init() throws Exception {
-		// Nothing special
+		sendData("----");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class StepMotor extends Thing {
 		byte[] data = {
 				WRITE_TO,
 				(byte) (this.port + SERVO_OFFSET),
-				(byte)(pos - 48),
+				(byte)(pos + 64),
 		};
 		sendData(new String(data));
 		Thread.sleep(WRITE_TIMEOUT);

@@ -1,5 +1,6 @@
 package com.pakonat;
 
+import com.pakonat.avionics.Altimeter;
 import com.pakonat.avionics.IAS;
 import com.pakonat.avionics.VerticalSpeed;
 import com.pakonat.things.Servo;
@@ -22,6 +23,7 @@ public class Main {
 		
 		new IAS(arduino, fsui);
 		new VerticalSpeed(arduino, fsui);
+		new Altimeter(arduino, fsui);
 		
 		arduino.start();
 	}
