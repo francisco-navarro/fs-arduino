@@ -11,7 +11,7 @@ public class Servo extends Thing {
 	/** Order attach servo arduino */
 	protected static String ATTACH = "a";
 
-	private static final long WRITE_TIMEOUT = 5;
+	private static final long WRITE_TIMEOUT = 1;
 	 
 	protected int port;
 	
@@ -22,6 +22,8 @@ public class Servo extends Thing {
 	protected int memory;
 	
 	protected float value = 0;
+	
+	protected float last = 0;
 	
 	protected String name;
 	
@@ -60,14 +62,17 @@ public class Servo extends Thing {
 	}
 
 	public void writeServo (int pos) throws Exception {
-		byte[] data = {
-				WRITE_TO,
-				(byte) (this.port + SERVO_OFFSET),
-				(byte)(pos % 91 + 30),
-				(byte)(pos >= 91 ? 91 + 30 : 0)
-		};
-		sendData(new String(data));
-		Thread.sleep(WRITE_TIMEOUT);
+		if(last != pos) {
+			last = pos;
+			byte[] data = {
+					WRITE_TO,
+					(byte) (this.port + SERVO_OFFSET),
+					(byte)(pos % 91 + 30),
+					(byte)(pos >= 91 ? 91 + 30 : 0)
+			};
+			sendData(new String(data));
+			Thread.sleep(WRITE_TIMEOUT);
+		}
 	}
 
 }

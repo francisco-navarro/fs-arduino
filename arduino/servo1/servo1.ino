@@ -95,8 +95,8 @@ void motorStep() {
   int n = (int) params[2] - 64;
   // 1000 pies - 53 pasos
   float onehundred = 52.8;
-  // 100 pies
-  float factor = onehundred/10.0;
+  // 50 pies
+  float factor = onehundred/20.0;
   
   if (!stepper[nStepper]) {
     pinMode(nStepper, OUTPUT);
@@ -109,11 +109,11 @@ void motorStep() {
   Serial.print(nStepper);
   Serial.print(" | ");
   Serial.print(stepper[nStepper]);
-  stepper[nStepper] += n * 100;
+  stepper[nStepper] += n * 50;
   Serial.print(" | ");
   Serial.print(stepper[nStepper]);
   Serial.print(" | ");
-  Serial.print(n * 100);
+  Serial.print(n * 50);
   Serial.print("pies");
   Serial.print(" | ");
   Serial.print(n*factor);

@@ -8,7 +8,7 @@ public class StepMotor extends Thing {
 	// Order for arduino
 	protected static byte WRITE_TO = 115;
 	
-	protected static final int WRITE_TIMEOUT = 15;
+	protected static final int WRITE_TIMEOUT = 2;
 	
 	protected int memory;
 	
