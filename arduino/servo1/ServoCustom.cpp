@@ -1,38 +1,53 @@
 #include <Arduino.h>
-#include <Servo.h>
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 #include "ServoCustom.hpp"
 
 ServoCustom::ServoCustom () {
-  // de momento nada
+  servos = Adafruit_PWMServoDriver(0x40);
+  servos.begin();   
+  servos.setPWMFreq(60); 
+  // AJustar para el servo
+  pos0=172; // ancho de pulso en cuentas para pocicion 0°
+  pos180=565; // ancho de pulso en cuentas para la pocicion 180°
+
 }
 
 void ServoCustom::attachServo (int count, char params[]) {
-  if (count>1) {
+  // Con la placa no hacemos
+  /*if (count>1) {
     int n = (int) params[1] - 48;
     myservo[n].attach(n);
     Serial.print("servo attached");
     Serial.println(n);
-  }
+  }*/
 }
 
 void ServoCustom::writeServo (int count, char params[]) {
   int deg = 0;
+  int duty;
   // w - 4 - ZZ
   // El segundo parametro es de un byte o dos, empieza enel espacio (32)
   if (count > 2) {
-    int n = (int) params[1] - 48;
+    uint8_t n = (uint8_t) params[1] - 48;
     deg = (int) params[2] - 30;
     if(count > 3 && params[3] > 30) {
       deg += (int) params[3] - 30;
     }
+    duty=map(deg, 0, 180, 172, 565);
     Serial.print("write ");
     Serial.print(n);
     Serial.print(" -> ");
+    Serial.print(" duty ");
+    Serial.print(duty);
+    Serial.print(" | deg ");
     Serial.println(deg);
-    myservo[n].write(deg);
+    
+    servos.setPWM(n, 0, duty);
   }
 }
 
 void ServoCustom::detachServo (int n) {
-  myservo[n].detach();
+  // myservo[n].detach();
+  // No hacemos
 };
