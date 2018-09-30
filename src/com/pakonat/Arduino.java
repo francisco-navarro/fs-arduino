@@ -165,9 +165,9 @@ public class Arduino implements SerialPortEventListener {
 				
 				while(keep) {
 					
-					while(servosStarted > 0) {					
-						Thread.sleep(500);
-					}
+//					while(servosStarted > 0) {					
+//						Thread.sleep(500);
+//					}
 					for(Thing thing : things) {
 						thing.update();
 					}
