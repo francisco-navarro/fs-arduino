@@ -9,9 +9,13 @@ public class VerticalSpeed extends Servo {
 	protected double verticalSpeed;
 	
 	private final static String NAME = "vertical.speed";
+	
+	protected int zeroPoint;
 
 	public VerticalSpeed(Arduino arduino, FSUI fsui) {
 		super(arduino, fsui, NAME);
+		max = 24;
+		zeroPoint = Integer.parseInt(arduino.getProperty(name + ".zero.point"));
 	}
 
 	@Override
@@ -20,11 +24,9 @@ public class VerticalSpeed extends Servo {
 		// El valor en nudos viene * 128
 		verticalSpeed = actual *60*3.28084/256/100;
 		// En value guardo 0.####
-		value =  (float) Math.abs(verticalSpeed / max);
+		value =  (float) verticalSpeed / max;
 		
-		writeServo(Math.min(180,
-				Math.round(90 + 90 * value * (verticalSpeed<0?1:-1)))
-				);
+		writeServo(Math.round(zeroPoint + value * 90));
 	}
 	
 }

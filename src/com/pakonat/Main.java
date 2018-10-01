@@ -22,7 +22,7 @@ public class Main {
 		fsui = new FSUI(prop);
 		
 		new IAS(arduino, fsui);
-		//new VerticalSpeed(arduino, fsui);
+		new VerticalSpeed(arduino, fsui);
 		//new Altimeter(arduino, fsui);
 		
 		arduino.start();

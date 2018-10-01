@@ -10,11 +10,25 @@ int count = 0;
 char order;
 char params[5];
 
+// -- encoder
+int val;
+int encoder0PinA = 3;
+int encoder0PinB = 4;
+int encoder0Pos = 0;
+int encoder0PinALast = LOW;
+int n = LOW;
+
 void setup() {
   servo = new ServoCustom();
   motorStep = new MotorStep();
+
+  // -- setup reads
+  pinMode (encoder0PinA, INPUT);
+  pinMode (encoder0PinB, INPUT);
+  // -- end setup reads 
   Serial.begin(115200);
   Serial.println("ready");
+  
 }
 
 void loop() {
@@ -30,8 +44,24 @@ void loop() {
       } else if (order == 's') {
         motorStep->move(params);
       }
+      //Serial.println(reads());
       Serial.println("_");
     }
   }
-  delay (2);
+  reads();
+  delay (10);
+}
+
+String reads() {
+  n = digitalRead(encoder0PinA);
+  if ((encoder0PinALast == LOW) && (n == HIGH)) {
+    if (digitalRead(encoder0PinB) == LOW) {
+      encoder0Pos--;
+    } else {
+      encoder0Pos++;
+    }
+    Serial.print (encoder0Pos);
+    Serial.print ("/");
+  }
+  encoder0PinALast = n;
 }

@@ -39,8 +39,6 @@ public class Servo extends Thing {
 		if (port != null ) {
 			this.name = name;
 			this.port = Integer.parseInt(port);
-			this.max = Integer.parseInt(max);
-			this.min = Integer.parseInt(min);
 			this.memory = Integer.parseInt(memory, 16);
 			arduino.addThing(this);
 			arduino.servosStarted++;
