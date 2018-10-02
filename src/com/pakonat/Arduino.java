@@ -137,6 +137,10 @@ public class Arduino implements SerialPortEventListener {
 				if(inputLine.indexOf("attach") >= 0) {
 					// Event of servo started
 					servosStarted--;
+				} else {
+					for(Thing thing : things) {
+						thing.receiveEvent(inputLine);
+					}
 				}
 			} catch (Exception e) {
 				System.err.println(e.toString());

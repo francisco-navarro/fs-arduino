@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/fsuipc.jar" sourcepath="C:/Users/Pako/Downloads/FSUIPC_SDK/UIPC_SDK_JAVA/UIPC_SDK_JAVA/java/src"/>
+	<classpathentry kind="lib" path="lib/fsuipc.jar" sourcepath="D:/FSUIPC_SDK/UIPC_SDK_JAVA/UIPC_SDK_JAVA"/>
 	<classpathentry kind="lib" path="lib/test.jar"/>
 	<classpathentry kind="lib" path="lib/RXTXcomm.jar"/>
 	<classpathentry kind="output" path="bin"/>

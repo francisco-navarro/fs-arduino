@@ -24,5 +24,9 @@ public abstract class Thing {
 	public abstract void init() throws Exception;
 
 	public abstract void update() throws Exception;
+	
+	public void receiveEvent(String str) throws Exception {
+		
+	}
 
 }

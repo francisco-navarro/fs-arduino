@@ -10,6 +10,8 @@ int count = 0;
 char order;
 char params[5];
 
+char sbuffer[50];
+
 // -- encoder
 int val;
 int encoder0PinA = 3;
@@ -44,7 +46,6 @@ void loop() {
       } else if (order == 's') {
         motorStep->move(params);
       }
-      //Serial.println(reads());
       Serial.println("_");
     }
   }
@@ -57,11 +58,13 @@ String reads() {
   if ((encoder0PinALast == LOW) && (n == HIGH)) {
     if (digitalRead(encoder0PinB) == LOW) {
       encoder0Pos--;
+      sprintf(sbuffer, "[encoder1:-]", encoder0Pos);
     } else {
       encoder0Pos++;
+      sprintf(sbuffer, "[encoder1:+]", encoder0Pos);
     }
-    Serial.print (encoder0Pos);
-    Serial.print ("/");
+    //sprintf(sbuffer, "[encoder1:%d]", encoder0Pos);
+    Serial.println(sbuffer);
   }
   encoder0PinALast = n;
 }
