@@ -51,12 +51,10 @@ public class Nav extends Thing {
 	private short toUnsigned(short value) {
 		ByteBuffer buf = ByteBuffer.allocate(2);
 		byte[] data = new byte[2];
-		short dig1 = (short) (value / 1000);
-		value = (short) (value - dig1*1000);
-		short dig2 = (short) (value / 100);
-		value = (short) (value - dig2*100);
-		short dig3 = (short) (value / 10);
-		short dig4 = (short) (value % 10);
+		int dig1 = value / 1000;
+		int dig2 = (value%1000) / 100;
+		int dig3 = (value%100) / 10;
+		int dig4 = value % 10;
 		
 		data[0] = (byte) (dig1<<4 | dig2);
 		data[1] = (byte) (dig3<<4 | dig4);
