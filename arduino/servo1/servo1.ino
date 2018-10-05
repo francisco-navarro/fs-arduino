@@ -8,7 +8,7 @@ MotorStep *motorStep;
 String input;
 int count = 0;
 char order;
-char params[5];
+char params[9];
 
 char sbuffer[50];
 

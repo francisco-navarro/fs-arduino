@@ -22,10 +22,10 @@ public class Main {
 		arduino = new Arduino(prop);
 		fsui = new FSUI(prop);
 		
-		new IAS(arduino, fsui);
-		new VerticalSpeed(arduino, fsui);
-		//new Altimeter(arduino, fsui);
-		new Nav(arduino, fsui);
+		//new IAS(arduino, fsui);
+		//new VerticalSpeed(arduino, fsui);
+		new Altimeter(arduino, fsui);
+		//new Nav(arduino, fsui);
 		
 		arduino.start();
 	}

@@ -9,34 +9,55 @@ public class Altimeter extends StepMotor {
 	protected long lastAltitude = 0;
 	
 	protected final static String NAME = "altimeter";
-	
-	protected long FEET_BY_STEP = 5;
-	
 	// one step => 4ms  
-	protected int MAX_STEPS = Arduino.REFESH_RATE / (4 + 2);
+	protected int MAX_STEPS = Arduino.REFESH_RATE / 4;
 	
-	public Altimeter(Arduino arduino, FSUI fsui) {
+	public Altimeter(Arduino arduino, FSUI fsui) throws Exception {
 		
 		super(arduino, fsui, NAME);
 		lastAltitude = getAltitude ();
+		initAltitude(lastAltitude);
+	}
+
+	private void initAltitude(long amount) throws Exception {
+		int times = (int) Math.floor (amount / 100);
+
+		for(int i=0;i<times;i++) {
+			writeStep((int) feetToStep(100));
+		}
+		long lastAmountToWrite = amount - 100*times;
+		writeStep((int) feetToStep(lastAmountToWrite));
 	}
 
 	@Override	
 	public void update() throws Exception {
 		long actual = getAltitude ();
-		long difference = actual - lastAltitude;
+		long feetDifference = actual - lastAltitude;
+		long stepDifference = feetToStep(feetDifference);
+		int symbol = 1;
+		if (feetDifference < 0) symbol = -1;
 		
 		
-		if (Math.abs(difference / FEET_BY_STEP) > 0) {
-			int amountToWrite = (int) Math.min(difference / FEET_BY_STEP, MAX_STEPS);
+		if (Math.abs(stepDifference) > 1) {
+			int amountToWrite = (int) Math.min(Math.abs(stepDifference), MAX_STEPS) * symbol;
+			System.out.println("actual alt " + lastAltitude + " -> " + (lastAltitude +stepToFeet(amountToWrite)) + " || write " + amountToWrite  + "steps");
 			
-			System.out.println("actual " + lastAltitude + " -> " + actual + " || write " + amountToWrite + "steps");
 			
-			
-			lastAltitude += amountToWrite * FEET_BY_STEP;
-			writeStep( amountToWrite);
+			lastAltitude += stepToFeet(amountToWrite);
+			writeStep((int)amountToWrite);
+			Thread.sleep(10);
 		}
 		
+	}
+	
+	private long stepToFeet (long n) {
+		// una vuelta (1000ft) 520 pasos
+		return Math.round(n / 0.52);
+	}
+	
+	private long feetToStep (long n) {
+		// una vuelta 520 (1000ft) pasos
+		return (long) Math.floor(n * 0.52);
 	}
 	
 	private long getAltitude () {

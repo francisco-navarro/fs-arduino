@@ -12,7 +12,7 @@ void MotorStep::move(char params[]) {
   // el 0 está en 48 
   // Cada numero son 100 pies
   int n = (int) params[2] - 64;
-  float factor = 50;
+  float factor = 1;
   if (!stepper[nStepper]) {
     Serial.print("setting pins from stepper");
     Serial.println(nStepper);
@@ -21,12 +21,12 @@ void MotorStep::move(char params[]) {
     pinMode(nStepper+2, OUTPUT);
     pinMode(nStepper+3, OUTPUT);
   }
-  
+  /*
   Serial.print("write stepmotor_");
   Serial.print(nStepper);
   Serial.print(" | ");
   Serial.print(n*factor);
-  Serial.print(" pasos");
+  Serial.print(" pasos");*/
 
   stepper[nStepper] = n*factor;
 

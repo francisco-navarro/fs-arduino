@@ -35,14 +35,6 @@ void ServoCustom::writeServo (int count, char params[]) {
       deg += (int) params[3] - 30;
     }
     duty=map(deg, 0, 180, 172, 565);
-    Serial.print("write ");
-    Serial.print(n);
-    Serial.print(" -> ");
-    Serial.print(" duty ");
-    Serial.print(duty);
-    Serial.print(" | deg ");
-    Serial.println(deg);
-    
     servos.setPWM(n, 0, duty);
   }
 }
