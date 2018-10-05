@@ -4,16 +4,23 @@
 
 MotorStep::MotorStep () {
   for(int i=0; i<14;i++)
-    stepper[i] = 0;
+    position[i] = 0;
 }
 
 void MotorStep::move(char params[]) {
   int nStepper = (int) params[1] - 48;
   // el 0 está en 48 
-  // Cada numero son 100 pies
-  int n = (int) params[2] - 64;
-  float factor = 1;
-  if (!stepper[nStepper]) {
+  // Cada numero son 1 step
+  Serial.println("stepmotor order");
+  
+  int n = (uint32_t)params[2]<< 12
+    | (uint32_t)params[3]<< 8
+    |(uint32_t)params[4] << 4
+    | (uint32_t)params[5];
+
+  int diference = n - position[nStepper];
+  
+  if (!position[nStepper]) {
     Serial.print("setting pins from stepper");
     Serial.println(nStepper);
     pinMode(nStepper, OUTPUT);
@@ -21,18 +28,16 @@ void MotorStep::move(char params[]) {
     pinMode(nStepper+2, OUTPUT);
     pinMode(nStepper+3, OUTPUT);
   }
-  /*
   Serial.print("write stepmotor_");
   Serial.print(nStepper);
   Serial.print(" | ");
-  Serial.print(n*factor);
-  Serial.print(" pasos");*/
+  Serial.print(diference);
+  Serial.print(" pasos");
+  position[nStepper] += diference;
 
-  stepper[nStepper] = n*factor;
-
-  //una vuelta 264 steps - byte c
-  for(int s = 0; s<abs(n*factor); s++)
-    n<0 ? stepForward(nStepper) : stepBackward(nStepper);
+  //una vuelta 520 steps - byte c
+  for(int s = 0; s<abs(diference); s++)
+    diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
 
   digitalWrite(nStepper, 0);
   digitalWrite(nStepper+1, 0);

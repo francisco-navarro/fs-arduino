@@ -46,14 +46,21 @@ public class StepMotor extends Thing {
 		
 	}
 	
-	public void writeStep (int pos) throws Exception {
+	public void writeStep (int amount) throws Exception {
 		byte[] data = {
 				WRITE_TO,
-				(byte) (this.port + SERVO_OFFSET),
-				(byte)(pos + 64),
+				(byte) (this.port + SERVO_OFFSET)
 		};
-		sendData(new String(data));
+		sendData(new String(data) + toBuff(amount));
 		Thread.sleep(WRITE_TIMEOUT);
 	}
-
+	
+	public static byte[] toBuff(int a) {
+		byte[] buf = new byte[4];
+		buf[0] = (byte)(a>>12 & 0x0f);
+		buf[1] = (byte)(a>>8 & 0x0f);
+		buf[2] = (byte)(a>>4 & 0x0f);
+		buf[3] = (byte) (a& 0x0f);
+		return buf;
+	}
 }

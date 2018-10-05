@@ -21,12 +21,12 @@ public class Altimeter extends StepMotor {
 
 	private void initAltitude(long amount) throws Exception {
 		int times = (int) Math.floor (amount / 100);
-
+		int pos = 0;
 		for(int i=0;i<times;i++) {
-			writeStep((int) feetToStep(100));
+			pos +=100;
+			writeStep((int) feetToStep(pos));
 		}
-		long lastAmountToWrite = amount - 100*times;
-		writeStep((int) feetToStep(lastAmountToWrite));
+		writeStep((int) feetToStep(amount));
 	}
 
 	@Override	

@@ -1,6 +1,6 @@
 class MotorStep {
   private:
-    float stepper[14];
+    long position[14];
     int motorStepM[4][4] =
       {
         {1, 0, 0, 0},
