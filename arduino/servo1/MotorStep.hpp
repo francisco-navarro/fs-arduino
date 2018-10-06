@@ -10,7 +10,7 @@ class MotorStep {
       };
   public: 
     MotorStep();
-    void move(char params[]);
+    void move(byte params[]);
     void stepForward(int nStepper);
     void stepBackward(int nStepper);
 };

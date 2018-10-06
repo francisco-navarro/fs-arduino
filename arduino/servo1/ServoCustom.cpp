@@ -13,7 +13,7 @@ ServoCustom::ServoCustom () {
 
 }
 
-void ServoCustom::attachServo (int count, char params[]) {
+void ServoCustom::attachServo (int count, byte params[]) {
   // Con la placa no hacemos
   /*if (count>1) {
     int n = (int) params[1] - 48;
@@ -23,7 +23,7 @@ void ServoCustom::attachServo (int count, char params[]) {
   }*/
 }
 
-void ServoCustom::writeServo (int count, char params[]) {
+void ServoCustom::writeServo (int count, byte params[]) {
   int deg = 0;
   int duty;
   // w - 4 - ZZ

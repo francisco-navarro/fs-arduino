@@ -51,7 +51,7 @@ public class StepMotor extends Thing {
 				WRITE_TO,
 				(byte) (this.port + SERVO_OFFSET)
 		};
-		sendData(new String(data) + toBuff(amount));
+		sendData(new String(data) + new String(toBuff(amount)));
 		Thread.sleep(WRITE_TIMEOUT);
 	}
 	

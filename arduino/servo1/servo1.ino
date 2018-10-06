@@ -10,7 +10,7 @@ Encoder *encoder1;
 String input;
 int count = 0;
 char order;
-char params[8];
+byte params[8];
 
 
 void setup() {
@@ -27,6 +27,7 @@ void loop() {
     count = Serial.readBytesUntil('\n', params, 8);
     order = params[0];
 
+   
     
     if(count > 0 && order !='\n') {
       if (order == 'a') {

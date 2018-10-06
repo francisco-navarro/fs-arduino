@@ -30,7 +30,7 @@ public class Arduino implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 115200;
 	
-	public static final int REFESH_RATE = 100;
+	public static final int REFESH_RATE = 60;
 
 	/** Amount of servos to start */
 	public static int servosStarted = 0;

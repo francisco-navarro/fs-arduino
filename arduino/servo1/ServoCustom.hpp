@@ -9,7 +9,7 @@ class ServoCustom {
     unsigned int pos180; // ancho de pulso en cuentas para la pocicion 180°
   public:
     ServoCustom();
-    void attachServo(int count, char params[]);
-    void writeServo(int count, char params[]);
+    void attachServo(int count, byte params[]);
+    void writeServo(int count, byte params[]);
     void detachServo(int n);
 };

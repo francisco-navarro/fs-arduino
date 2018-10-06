@@ -10,7 +10,7 @@ public class Altimeter extends StepMotor {
 	
 	protected final static String NAME = "altimeter";
 	// one step => 4ms  
-	protected int MAX_STEPS = Arduino.REFESH_RATE / 4;
+	protected int MAX_STEPS = Arduino.REFESH_RATE / 2;
 	
 	public Altimeter(Arduino arduino, FSUI fsui) throws Exception {
 		
@@ -39,13 +39,14 @@ public class Altimeter extends StepMotor {
 		
 		
 		if (Math.abs(stepDifference) > 1) {
-			int amountToWrite = (int) Math.min(Math.abs(stepDifference), MAX_STEPS) * symbol;
-			System.out.println("actual alt " + lastAltitude + " -> " + (lastAltitude +stepToFeet(amountToWrite)) + " || write " + amountToWrite  + "steps");
+			if(Math.abs(stepDifference) > MAX_STEPS) {
+				actual = lastAltitude + stepToFeet( MAX_STEPS*symbol);
+			}
+			System.out.println("actual alt " + lastAltitude + " -> " + actual + " || write " + actual  + "steps");
 			
-			
-			lastAltitude += stepToFeet(amountToWrite);
-			writeStep((int)amountToWrite);
-			Thread.sleep(10);
+
+			writeStep((int)feetToStep(actual));
+			lastAltitude = actual;
 		}
 		
 	}
