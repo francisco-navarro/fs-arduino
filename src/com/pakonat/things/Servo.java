@@ -61,6 +61,8 @@ public class Servo extends Thing {
 
 	public void writeServo (int pos) throws Exception {
 		if(last != pos) {
+			pos = Math.min(180, pos);
+			pos = Math.max(0, pos);
 			last = pos;
 			byte[] data = {
 					WRITE_TO,

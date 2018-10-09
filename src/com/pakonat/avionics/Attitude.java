@@ -30,13 +30,13 @@ public class Attitude extends Servo{
 	public void update() throws Exception {
 		
 		
-		int pitch = (int) Math.round(aircraft.Pitch());
-		int bank = (int) Math.round(aircraft.Bank());
+		double pitch = aircraft.Pitch() * -1;
+		double bank = aircraft.Bank() *-1;
 		// Viene en grados, 40 maximo, -40 minimo
 		
-		// 40 es 120
-		int degreesP = (pitch * 60 / 40) + 90;
-		int degreesB = (bank * 60 / 40) + 90;
+		// El 90 y el 86 son los puntos 0
+		int degreesP = (int) Math.round((pitch * 1) + 90);
+		int degreesB = (int) Math.round((bank * 1.4) + 86);
 		
 		
 		writeServo(PITCH_PORT, degreesP);
@@ -44,7 +44,7 @@ public class Attitude extends Servo{
 	}
 
 	public void writeServo (int port, int pos) throws Exception {
-		if(last != pos) {
+		if(Math.abs(pos) < 120 &&  Math.abs(pos) > 60) {
 			last = pos;
 			byte[] data = {
 					WRITE_TO,
@@ -53,6 +53,7 @@ public class Attitude extends Servo{
 					(byte)(pos >= 91 ? 91 + 30 : 0)
 			};
 			sendData(data);
+			//System.out.println(new String(data));
 			Thread.sleep(WRITE_TIMEOUT);
 		}
 	}

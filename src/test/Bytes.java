@@ -33,7 +33,7 @@ public class Bytes implements SerialPortEventListener {
 	
 	
 	public static void main(String[] args) throws Exception {
-		int start = 65530;
+		int start = 520;
 		
 		Bytes instance = new Bytes();
 		
