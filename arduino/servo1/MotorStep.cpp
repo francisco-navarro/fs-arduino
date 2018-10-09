@@ -13,10 +13,10 @@ void MotorStep::move(byte params[]) {
   // Cada numero son 1 step
   //Serial.print("stepmotor order ");
   
-  int n = //(uint32_t)params[2]<< 24
-    //| (uint32_t)params[3]<< 16
-     (((uint8_t) params[4]) << 8) & 0xFF00 |
-     (((uint8_t)params[5]) & 0xFF);
+  long n = //(uint8_t)params[2]<< 24 |
+    (uint8_t)params[3]<< 16 |
+     ((uint8_t) params[4]) << 8 & 0xFF00 |
+     ((uint8_t)params[5]) & 0xFF;
 
      
 
@@ -28,7 +28,7 @@ void MotorStep::move(byte params[]) {
   //Serial.print(params[4]);
   //Serial.print(params[5]);
   //Serial.print((((uint8_t)params[5]) & 0xFF), BIN);
-  Serial.print(" - ");
+  Serial.print(" : ");
   Serial.println(n);
    
   if (!position[nStepper]) {
@@ -47,8 +47,8 @@ void MotorStep::move(byte params[]) {
   position[nStepper] += diference;*/
 
   //una vuelta 520 steps - byte c
-  //for(int s = 0; s<abs(diference); s++)
-  //  diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
+  for(int s = 0; s<abs(diference); s++)
+    diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
 
   digitalWrite(nStepper, 0);
   digitalWrite(nStepper+1, 0);

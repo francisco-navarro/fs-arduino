@@ -1,6 +1,7 @@
 package com.pakonat;
 
 import com.pakonat.avionics.Altimeter;
+import com.pakonat.avionics.Attitude;
 import com.pakonat.avionics.IAS;
 import com.pakonat.avionics.VerticalSpeed;
 import com.pakonat.things.Nav;
@@ -22,9 +23,10 @@ public class Main {
 		arduino = new Arduino(prop);
 		fsui = new FSUI(prop);
 		
-		//new IAS(arduino, fsui);
-		//new VerticalSpeed(arduino, fsui);
-		new Altimeter(arduino, fsui);
+		new IAS(arduino, fsui);
+		new VerticalSpeed(arduino, fsui);
+		new Attitude(arduino, fsui);
+		//new Altimeter(arduino, fsui);
 		//new Nav(arduino, fsui);
 		
 		arduino.start();

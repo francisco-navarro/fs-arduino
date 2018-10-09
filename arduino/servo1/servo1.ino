@@ -45,5 +45,5 @@ void loop() {
 }
 
 String reads() {
-  encoder1 -> read();
+  // encoder1 -> read();
 }

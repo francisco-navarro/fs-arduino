@@ -33,7 +33,7 @@ public class Bytes implements SerialPortEventListener {
 	
 	
 	public static void main(String[] args) throws Exception {
-		int start = 125;
+		int start = 65530;
 		
 		Bytes instance = new Bytes();
 		
@@ -53,11 +53,10 @@ public class Bytes implements SerialPortEventListener {
 		
 		instance.sendData("a1".getBytes());
 		
-		for(int i=start; i<520;i++) {
+		for(int i=0; i<10;i++) {
 			
 			ByteBuffer bb = ByteBuffer.allocate(6).put("s9".getBytes());
-			bb.putInt(2, i);
-			//instance.sendData("s9" + new String(toBuff(0+i)));
+			bb.putInt(2, i + start);
 			instance.sendData(bb.array());
 			Thread.sleep(50);
 		}

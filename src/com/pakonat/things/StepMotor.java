@@ -1,5 +1,7 @@
 package com.pakonat.things;
 
+import java.nio.ByteBuffer;
+
 import com.pakonat.Arduino;
 import com.pakonat.FSUI;
 
@@ -38,7 +40,7 @@ public class StepMotor extends Thing {
 
 	@Override
 	public void init() throws Exception {
-		sendData("----");
+		sendData("----".getBytes());
 	}
 
 	@Override
@@ -47,11 +49,15 @@ public class StepMotor extends Thing {
 	}
 	
 	public void writeStep (int amount) throws Exception {
-		byte[] data = {
-				WRITE_TO,
-				(byte) (this.port + SERVO_OFFSET)
-		};
-		sendData(new String(data) + new String(toBuff(amount)));
+//		byte[] data = {
+//				WRITE_TO,
+//				(byte) (this.port + SERVO_OFFSET)
+//		};
+//		sendData(new String(data) + new String(toBuff(amount)));
+		
+		ByteBuffer bb = ByteBuffer.allocate(6).put(("s" +port).getBytes());
+		bb.putInt(2, amount);
+		sendData(bb.array());
 		Thread.sleep(WRITE_TIMEOUT);
 	}
 	

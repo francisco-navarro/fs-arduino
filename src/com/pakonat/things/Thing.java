@@ -17,7 +17,7 @@ public abstract class Thing {
 		this.fsui = fsui;
 	}
 	
-	protected synchronized void sendData(String data) throws InterruptedException{
+	protected synchronized void sendData(byte[] data) throws InterruptedException{
 		arduino.sendData(data);
 	}
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -81,7 +82,7 @@ public class Arduino implements SerialPortEventListener {
 			if (input.ready()) {
 			 emptyInput(input);
 			}
-			sendData(" ");
+			sendData(" ".getBytes());
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -121,13 +122,16 @@ public class Arduino implements SerialPortEventListener {
 		
 	}
 	
-	public synchronized void sendData(String data) throws InterruptedException{
+	public synchronized void sendData(byte[] data) throws InterruptedException{
 		try {
-			output.write((data + "\n").getBytes());
+			ByteBuffer bb = ByteBuffer.allocate(data.length + 1).put(data);
+			bb.put(data.length, "\n".getBytes()[0]);
+			output.write(bb.array());
 		} catch (IOException e) {
 			System.err.println("Error sending data");
 		}
 	}
+
 	
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
