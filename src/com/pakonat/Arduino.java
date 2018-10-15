@@ -31,7 +31,7 @@ public class Arduino implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 115200;
 	
-	public static final int REFESH_RATE = 60;
+	public static final int REFESH_RATE = 40;
 
 	/** Amount of servos to start */
 	public static int servosStarted = 0;
@@ -137,7 +137,8 @@ public class Arduino implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String inputLine=input.readLine();
-				System.out.println(inputLine);
+				if(inputLine.length()>1)
+					System.out.println(inputLine);
 				if(inputLine.indexOf("attach") >= 0) {
 					// Event of servo started
 					servosStarted--;

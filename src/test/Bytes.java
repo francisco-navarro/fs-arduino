@@ -33,40 +33,56 @@ public class Bytes implements SerialPortEventListener {
 	
 	
 	public static void main(String[] args) throws Exception {
-		int start = 520;
+		int start = 518/2;
 		
 		Bytes instance = new Bytes();
 		
 		instance.initializeArduinoConnection();
-		Thread.sleep(520);
-		
-//		instance.sendData("_");
-//		Thread.sleep(1000);
-//		instance.sendData("_");
-//		Thread.sleep(300);
-//		instance.sendData("s9" + new String(toBuff(start)));
-//		
-//		Thread.sleep(300);
-//		instance.sendData("_");
-//		
+		Thread.sleep(1510);
 		
 		
 		instance.sendData("a1".getBytes());
+		ByteBuffer bb = ByteBuffer.allocate(6).put("s9".getBytes());
+		bb.putInt(2, start);
+		instance.sendData(bb.array());
+		Thread.sleep(3200);
 		
-		for(int i=0; i<10;i++) {
-			
-			ByteBuffer bb = ByteBuffer.allocate(6).put("s9".getBytes());
-			bb.putInt(2, i + start);
-			instance.sendData(bb.array());
-			Thread.sleep(50);
-		}
-		
-		start = 0;
-		
-//		for(int i=520; i>0;i++) {
-//			Thread.sleep(50);
-//			instance.sendData("s9" + new String(toBuff(i)));
+//		for(int i=0; start>120;start-=5) {
+//			i++;
+//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb.putInt(2, start + 1);
+//			instance.sendData(bb.array());
+//			Thread.sleep(80);
 //		}
+//		for(start = 120; start<520;start+=6) {
+//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb.putInt(2, start + 1);
+//			instance.sendData(bb.array());
+//			Thread.sleep(80);
+//		}
+		for(; start>0;start-=5) {
+			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+			bb.putInt(2, start);
+			instance.sendData(bb.array());
+			Thread.sleep(80);
+			bb.putInt(2, start + 3);
+			instance.sendData(bb.array());
+			Thread.sleep(120);
+			bb.putInt(2, start - 2);
+			instance.sendData(bb.array());
+			Thread.sleep(80);
+		}
+//		for(; start<520;start+=3) {
+//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb.putInt(2, start + 1);
+//			instance.sendData(bb.array());
+//			Thread.sleep(80);
+//		}
+		Thread.sleep(550);
+		 
+		start = 0;
+		System.exit(0);
+		
 	}
 	
 	public static void print (byte[] bb) {
@@ -109,8 +125,8 @@ public class Bytes implements SerialPortEventListener {
 			// add event listeners
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
-					
-			Thread.sleep(1000);
+
+			
 			if (input.ready()) {
 			 emptyInput(input);
 			}
@@ -118,6 +134,7 @@ public class Bytes implements SerialPortEventListener {
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			sendData(" ".getBytes());
 			throw e;
 		}
 	}

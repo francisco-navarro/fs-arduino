@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Math.h>
 #include "MotorStep.hpp"
 
 
@@ -12,7 +13,9 @@ void MotorStep::move(byte params[]) {
   // el 0 está en 48 
   // Cada numero son 1 step
   //Serial.print("stepmotor order ");
-  
+  short symbol = 1;
+  short lastSymbol = 1;
+  short margin = 0;
   long n = //(uint8_t)params[2]<< 24 |
     (uint8_t)params[3]<< 16 |
      ((uint8_t) params[4]) << 8 & 0xFF00 |
@@ -21,39 +24,49 @@ void MotorStep::move(byte params[]) {
      
 
   int diference = n - position[nStepper];
-  Serial.print("to motor ");Serial.print(nStepper);
-  Serial.print(": ");
-  //Serial.print(params[2]);
-  //Serial.print(params[3]);
-  //Serial.print(params[4]);
-  //Serial.print(params[5]);
-  //Serial.print((((uint8_t)params[5]) & 0xFF), BIN);
-  Serial.print(" : ");
-  Serial.println(n);
-   
-  if (!position[nStepper]) {
-   // Serial.print("setting pins from stepper");
-    //Serial.println(nStepper);
-    pinMode(nStepper, OUTPUT);
-    pinMode(nStepper+1, OUTPUT);
-    pinMode(nStepper+2, OUTPUT);
-    pinMode(nStepper+3, OUTPUT);
+  int lastSpeed = speed[nStepper];
+
+  if(abs(position[nStepper]) > 1) {
+    symbol = diference<0 ? -1 : 1;
+    lastSymbol = lastSpeed<0 ? -1 : 1;
+    //if(abs(diference) < 15) diference += symbol;
+    if(abs(diference) < 4) diference += symbol;
+    //if(symbol!=lastSymbol && abs(diference) < 10) {
+      //Serial.print(" Change direction ");
+      //margin += symbol;
+    //}
+    
   }
-  /*Serial.print("write stepmotor_");
-  Serial.print(nStepper);
-  Serial.print(" | ");
-  Serial.print(diference);
-  Serial.print(" pasos");
-  position[nStepper] += diference;*/
+  //Serial.print(" to motor ");Serial.print(nStepper);
 
-  //una vuelta 520 steps - byte c
-  for(int s = 0; s<abs(diference); s++)
-    diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
-
-  digitalWrite(nStepper, 0);
-  digitalWrite(nStepper+1, 0);
-  digitalWrite(nStepper+2, 0);
-  digitalWrite(nStepper+3, 0);
+  if (abs(diference) > 1 && abs(diference)<1000){
+   //Serial.print(" diference ");Serial.print(diference);
+    
+    
+    //Serial.print(": "); 
+    //Serial.println(n);
+     
+    if (!position[nStepper]) {
+      pinMode(nStepper, OUTPUT);
+      pinMode(nStepper+1, OUTPUT);
+      pinMode(nStepper+2, OUTPUT);
+      pinMode(nStepper+3, OUTPUT);
+    }
+  
+    //una vuelta 520 steps - byte c
+    for(int s = 0; s<abs(diference + margin); s++)
+      diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
+  
+    position[nStepper] += diference;
+    speed[nStepper] = diference;
+  
+    digitalWrite(nStepper, 0);
+    digitalWrite(nStepper+1, 0);
+    digitalWrite(nStepper+2, 0);
+    digitalWrite(nStepper+3, 0);
+  } else {
+    Serial.print("-");
+  }
 }
 
 void MotorStep::stepForward(int nStepper) {
