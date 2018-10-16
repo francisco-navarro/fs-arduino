@@ -23,7 +23,7 @@ public class Bytes implements SerialPortEventListener {
 	private InputStreamReader inputStream;
 	
 	private static SerialPort serialPort;
-	private static String PORT_NAME = "COM3";
+	private static String PORT_NAME = "COM4";
 	
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;
@@ -41,27 +41,27 @@ public class Bytes implements SerialPortEventListener {
 		Thread.sleep(1510);
 		
 		
-		instance.sendData("a1".getBytes());
-		ByteBuffer bb = ByteBuffer.allocate(6).put("s9".getBytes());
+		instance.sendData("s144".getBytes());
+		ByteBuffer bb = ByteBuffer.allocate(6).put("sF".getBytes());
 		bb.putInt(2, start);
 		instance.sendData(bb.array());
 		Thread.sleep(3200);
 		
 //		for(int i=0; start>120;start-=5) {
 //			i++;
-//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb = ByteBuffer.allocate(6).put("sF".getBytes());
 //			bb.putInt(2, start + 1);
 //			instance.sendData(bb.array());
 //			Thread.sleep(80);
 //		}
 //		for(start = 120; start<520;start+=6) {
-//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb = ByteBuffer.allocate(6).put("sF".getBytes());
 //			bb.putInt(2, start + 1);
 //			instance.sendData(bb.array());
 //			Thread.sleep(80);
 //		}
 		for(; start>0;start-=5) {
-			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+			bb = ByteBuffer.allocate(6).put("sF".getBytes());
 			bb.putInt(2, start);
 			instance.sendData(bb.array());
 			Thread.sleep(80);
@@ -73,7 +73,7 @@ public class Bytes implements SerialPortEventListener {
 			Thread.sleep(80);
 		}
 //		for(; start<520;start+=3) {
-//			bb = ByteBuffer.allocate(6).put("s9".getBytes());
+//			bb = ByteBuffer.allocate(6).put("sF".getBytes());
 //			bb.putInt(2, start + 1);
 //			instance.sendData(bb.array());
 //			Thread.sleep(80);
@@ -141,7 +141,7 @@ public class Bytes implements SerialPortEventListener {
 
 	private CommPortIdentifier getPort() throws Exception {
 		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
-		PORT_NAME = "COM3";
+		PORT_NAME = "COM4";
 
 		// iterate through, looking for the port
 		while (portEnum.hasMoreElements()) {

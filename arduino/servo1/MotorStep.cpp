@@ -4,7 +4,7 @@
 
 
 MotorStep::MotorStep () {
-  for(int i=0; i<14;i++)
+  for(int i=0; i<48;i++)
     position[i] = 0;
 }
 
@@ -12,7 +12,8 @@ void MotorStep::move(byte params[]) {
   int nStepper = (int) params[1] - 48;
   // el 0 está en 48 
   // Cada numero son 1 step
-  //Serial.print("stepmotor order ");
+
+  
   short symbol = 1;
   short lastSymbol = 1;
   short margin = 0;
@@ -21,7 +22,11 @@ void MotorStep::move(byte params[]) {
      ((uint8_t) params[4]) << 8 & 0xFF00 |
      ((uint8_t)params[5]) & 0xFF;
 
-     
+
+    Serial.print("stepmotor order ");
+  Serial.println(nStepper);
+  Serial.print(" to motor-> ");Serial.println(n);
+  Serial.print(" actual -> ");Serial.println(position[nStepper]);
 
   int diference = n - position[nStepper];
   int lastSpeed = speed[nStepper];
@@ -37,16 +42,17 @@ void MotorStep::move(byte params[]) {
     //}
     
   }
-  //Serial.print(" to motor ");Serial.print(nStepper);
+
 
   if (abs(diference) > 1 && abs(diference)<1000){
-   //Serial.print(" diference ");Serial.print(diference);
+   Serial.print(" diference ");Serial.print(diference);
     
     
-    //Serial.print(": "); 
-    //Serial.println(n);
+    Serial.print(": "); 
+    Serial.println(n);
      
     if (!position[nStepper]) {
+      Serial.println(" setting positions pins ");
       pinMode(nStepper, OUTPUT);
       pinMode(nStepper+1, OUTPUT);
       pinMode(nStepper+2, OUTPUT);
@@ -59,6 +65,8 @@ void MotorStep::move(byte params[]) {
   
     position[nStepper] += diference;
     speed[nStepper] = diference;
+
+    Serial.print(" Motor position ");Serial.println(position[nStepper]);
   
     digitalWrite(nStepper, 0);
     digitalWrite(nStepper+1, 0);

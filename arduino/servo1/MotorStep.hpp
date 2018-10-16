@@ -1,8 +1,8 @@
 #include <Math.h>
 class MotorStep {
   private:
-    long position[14];
-    long speed[14];
+    long position[48];
+    long speed[48];
     int motorStepM[4][4] =
       {
         {1, 1, 0, 0},

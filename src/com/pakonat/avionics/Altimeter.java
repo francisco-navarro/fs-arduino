@@ -12,6 +12,7 @@ public class Altimeter extends StepMotor {
 	protected final static String NAME = "altimeter";
 	// one step => 4ms  
 	protected int MAX_STEPS = Arduino.REFESH_RATE / 4;
+	protected long[] LAST = {0,0,0,0};
 
 	public Altimeter(Arduino arduino, FSUI fsui) throws Exception {
 		
@@ -37,11 +38,13 @@ public class Altimeter extends StepMotor {
 		long feetDifference = actual - lastAltitude;
 		long stepDifference = feetToStep(feetDifference);
 		int symbol = 1;
-		int lastSymbol = lastSpeed < 0 ? -1 : 1;
 		if (feetDifference < 0) symbol = -1;
 		
-		if (Math.abs(stepDifference) > 1 && lastSymbol==symbol) {
-			if(Math.abs(stepDifference) > MAX_STEPS) {
+		addLastDifference(stepDifference);
+		long newStepDifference = averageStepDifference(stepDifference);
+		
+		if (Math.abs(newStepDifference) > 1) {
+			if(Math.abs(newStepDifference) > MAX_STEPS) {
 				actual = lastAltitude + stepToFeet( MAX_STEPS*symbol);
 			}
 			System.out.println("actual alt " + lastAltitude + " -> " + actual + " || write " + actual  + "steps");
@@ -51,10 +54,24 @@ public class Altimeter extends StepMotor {
 		} else {
 			Thread.sleep(100);
 		}
-		lastSpeed = stepDifference;
+		lastSpeed = newStepDifference;
 		
 	}
 	
+	private long averageStepDifference(long stepDifference) {
+		float average = LAST[0] + LAST[1] + LAST[2]+ LAST[3];
+		
+		return Math.round(average / 4.0) ;
+	}
+
+	private void addLastDifference(long stepDifference) {
+
+		for(int i=0;i<LAST.length -1;i++) {
+			LAST[i] = LAST[i+1];
+		}
+		LAST[LAST.length-1] = stepDifference;
+	}
+
 	private long stepToFeet (long n) {
 		// una vuelta (1000ft) 520 pasosp
 		return Math.round(n / 0.512);

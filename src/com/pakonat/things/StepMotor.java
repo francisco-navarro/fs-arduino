@@ -31,7 +31,7 @@ public class StepMotor extends Thing {
 		
 		if (port != null ) {
 			this.name = name;
-			this.port = Integer.parseInt(port);
+			this.port = Integer.parseInt(port, 16);
 			this.memory = Integer.parseInt(memory, 16);
 			this.velocity = Integer.parseInt(velocity);
 			arduino.addThing(this);
@@ -49,13 +49,14 @@ public class StepMotor extends Thing {
 	}
 	
 	public void writeStep (int amount) throws Exception {
-//		byte[] data = {
+//		byte[] data = {,
 //				WRITE_TO,
 //				(byte) (this.port + SERVO_OFFSET)
 //		};
 //		sendData(new String(data) + new String(toBuff(amount)));
-		
-		ByteBuffer bb = ByteBuffer.allocate(6).put(("s" +port).getBytes());
+		byte[]  order = {"s".getBytes()[0],
+		             (byte) (this.port + 48)};
+		ByteBuffer bb = ByteBuffer.allocate(6).put(order);
 		bb.putInt(2, amount);
 		sendData(bb.array());
 		Thread.sleep(WRITE_TIMEOUT);

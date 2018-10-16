@@ -16,7 +16,7 @@ byte params[8];
 void setup() {
   servo = new ServoCustom();
   motorStep = new MotorStep();
-  encoder1 = new Encoder(3, 4);
+  //encoder1 = new Encoder(3, 4);
   Serial.begin(115200);
   Serial.println("ready");
   

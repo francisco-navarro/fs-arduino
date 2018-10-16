@@ -4,7 +4,7 @@
 #include "ServoCustom.hpp"
 
 ServoCustom::ServoCustom () {
-  servos = Adafruit_PWMServoDriver(0x40);
+  servos = Adafruit_PWMServoDriver(0x4A);
   servos.begin();   
   servos.setPWMFreq(60); 
   // AJustar para el servo
