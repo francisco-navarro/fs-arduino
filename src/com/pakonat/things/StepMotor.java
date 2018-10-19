@@ -62,6 +62,21 @@ public class StepMotor extends Thing {
 		Thread.sleep(WRITE_TIMEOUT);
 	}
 	
+	public void writeSetup () throws Exception {
+//		byte[]  order = {"s".getBytes()[0],
+//		             (byte) (this.port + 48),
+//		             "z".getBytes()[0],
+//		             "z".getBytes()[0]};
+//		sendData(order);
+//		Thread.sleep(WRITE_TIMEOUT);
+		byte[]  order = {"s".getBytes()[0],
+	             (byte) (this.port + 48)};
+		ByteBuffer bb = ByteBuffer.allocate(6).put(order);
+		bb.putInt(2, 2);
+		sendData(bb.array());
+		Thread.sleep(WRITE_TIMEOUT);
+	}
+	
 	public static byte[] toBuff(int a) {
 		byte[] buf = new byte[4];
 		buf[0] = (byte)(a>>12 & 0x0f);

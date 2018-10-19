@@ -3,6 +3,7 @@ package com.pakonat.avionics;
 import com.pakonat.Arduino;
 import com.pakonat.FSUI;
 import com.pakonat.things.StepMotor;
+import com.sun.corba.se.spi.servicecontext.SendingContextServiceContext;
 
 public class Altimeter extends StepMotor {
 	
@@ -17,19 +18,22 @@ public class Altimeter extends StepMotor {
 	public Altimeter(Arduino arduino, FSUI fsui) throws Exception {
 		
 		super(arduino, fsui, NAME);
-		lastAltitude = getAltitude ();
+		writeSetup();
 		initAltitude(lastAltitude);
 	}
 
 	private void initAltitude(long amount) throws Exception {
-		int times = (int) Math.floor (amount / 1000);
+		// setup
+		
+		writeSetup();
+		int times = (int) Math.floor (amount / 500);
 		int pos = 0;
 		for(int i=0;i<times;i++) {
-			pos +=1000;
+			pos +=500;
 			writeStep((int) feetToStep(pos));
-			Thread.sleep(2000);
 		}
 		writeStep((int) feetToStep(amount));
+		lastAltitude = (int) feetToStep(amount);
 	}
 
 	@Override	
@@ -47,7 +51,7 @@ public class Altimeter extends StepMotor {
 			if(Math.abs(newStepDifference) > MAX_STEPS) {
 				actual = lastAltitude + stepToFeet( MAX_STEPS*symbol);
 			}
-			System.out.println("actual alt " + lastAltitude + " -> " + actual + " || write " + actual  + "steps");
+			//System.out.println("actual alt " + lastAltitude + " -> " + actual + " || write " + actual  + "steps");
 
 			writeStep((int)feetToStep(actual));
 			lastAltitude = actual;

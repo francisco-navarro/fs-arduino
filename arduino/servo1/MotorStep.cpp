@@ -13,20 +13,15 @@ void MotorStep::move(byte params[]) {
   // el 0 está en 48 
   // Cada numero son 1 step
 
-  
   short symbol = 1;
   short lastSymbol = 1;
   short margin = 0;
+  boolean adjust = true;
   long n = //(uint8_t)params[2]<< 24 |
     (uint8_t)params[3]<< 16 |
      ((uint8_t) params[4]) << 8 & 0xFF00 |
      ((uint8_t)params[5]) & 0xFF;
-
-
-    Serial.print("stepmotor order ");
-  Serial.println(nStepper);
-  Serial.print(" to motor-> ");Serial.println(n);
-  Serial.print(" actual -> ");Serial.println(position[nStepper]);
+     
 
   int diference = n - position[nStepper];
   int lastSpeed = speed[nStepper];
@@ -44,12 +39,13 @@ void MotorStep::move(byte params[]) {
   }
 
 
+
   if (abs(diference) > 1 && abs(diference)<1000){
-   Serial.print(" diference ");Serial.print(diference);
+    //Serial.print(" diference ");Serial.print(diference);
     
     
-    Serial.print(": "); 
-    Serial.println(n);
+    //Serial.print(": "); 
+    //Serial.println(n);
      
     if (!position[nStepper]) {
       Serial.println(" setting positions pins ");
@@ -57,16 +53,54 @@ void MotorStep::move(byte params[]) {
       pinMode(nStepper+1, OUTPUT);
       pinMode(nStepper+2, OUTPUT);
       pinMode(nStepper+3, OUTPUT);
+      int val = 0;
+      analogRead(11);
+      while (val<61) {
+        stepForward(nStepper);
+        val=analogRead(11);
+        val+=analogRead(11);
+      }
+      Serial.println("Set 0 ");
+      val = 0;
+      while (val<900) {
+        stepForward(nStepper);
+        val=analogRead(10);
+      }
+      position[nStepper] = 1;
+      Serial.println("Set 0 ");
+      delay(500);
+      stepBackward(nStepper);
+      return;
     }
   
     //una vuelta 520 steps - byte c
-    for(int s = 0; s<abs(diference + margin); s++)
+    for(int s = 0; s<abs(diference + margin); s++) {
       diference<0 ? stepForward(nStepper) : stepBackward(nStepper);
+     if (s%10==0) {
+        int val=analogRead(10);
+        delay(2);
+        if(val>900 && adjust) {
+          int actual = position[nStepper]+s*symbol;
+          int variant = 518 - (actual % 518);
+          adjust = abs(variant) > 90;
+          if (adjust) {
+            Serial.print(symbol>0 ? "ascendente" : "descendente" );
+            Serial.print(" Position ");
+            Serial.print(position[nStepper]+s*symbol);
+            Serial.print(" IR - desajuste ");
+            Serial.println(variant);
+            if (symbol>0) {
+              position[nStepper]-=abs(variant);
+            } {
+              position[nStepper]+=abs(variant);
+            }
+          }
+        }
+      }
+    }
   
     position[nStepper] += diference;
     speed[nStepper] = diference;
-
-    Serial.print(" Motor position ");Serial.println(position[nStepper]);
   
     digitalWrite(nStepper, 0);
     digitalWrite(nStepper+1, 0);

@@ -30,6 +30,9 @@ void loop() {
    
     
     if(count > 0 && order !='\n') {
+
+      
+  
       if (order == 'a') {
         servo->attachServo(count, params);
       } else if (order == 'w') {
