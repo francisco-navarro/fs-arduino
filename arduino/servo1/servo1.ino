@@ -2,10 +2,12 @@
 #include "ServoCustom.hpp"
 #include "MotorStep.hpp"
 #include "Encoder.hpp"
+#include "Flaps.hpp"
 
 ServoCustom *servo;
 MotorStep *motorStep;
 Encoder *encoder1;
+Flaps *flaps;
 
 String input;
 int count = 0;
@@ -17,6 +19,7 @@ void setup() {
   servo = new ServoCustom();
   motorStep = new MotorStep();
   //encoder1 = new Encoder(3, 4);
+  flaps = new Flaps(A1);
   Serial.begin(115200);
   Serial.println("ready");
   
@@ -49,4 +52,5 @@ void loop() {
 
 String reads() {
   // encoder1 -> read();
+  flaps -> read();
 }

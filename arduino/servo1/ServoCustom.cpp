@@ -4,7 +4,7 @@
 #include "ServoCustom.hpp"
 
 ServoCustom::ServoCustom () {
-  servos = Adafruit_PWMServoDriver(0x4A);
+  servos = Adafruit_PWMServoDriver(0x40);
   servos.begin();   
   servos.setPWMFreq(60); 
   // AJustar para el servo
@@ -26,6 +26,7 @@ void ServoCustom::attachServo (int count, byte params[]) {
 void ServoCustom::writeServo (int count, byte params[]) {
   int deg = 0;
   int duty;
+  Serial.println(params[1]-48);
   // w - 4 - ZZ
   // El segundo parametro es de un byte o dos, empieza enel espacio (32)
   if (count > 2) {
@@ -34,8 +35,9 @@ void ServoCustom::writeServo (int count, byte params[]) {
     if(count > 3 && params[3] > 30) {
       deg += (int) params[3] - 30;
     }
-    /*Serial.print("servo ");
-    Serial.print(count);
+    /*
+    Serial.print("servo ");
+    Serial.print(n);
     Serial.print(" -> ");
     Serial.println(deg);*/
     duty=map(deg, 0, 180, 172, 565);

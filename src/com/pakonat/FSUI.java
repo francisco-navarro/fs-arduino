@@ -37,7 +37,7 @@ public class FSUI {
 	
 	public short getShort(int position) {
 		return fsui.getShort(position);
-	}
+	} 
 
 	public void write(int v) {
 		
@@ -50,5 +50,28 @@ public class FSUI {
 		data[1] = (byte) ((uValue >>8) & 0xff);
 		fsuipc_wrapper.WriteData(memory,2,data);
 	}
+	
+	public void writeInt(int memory, int uValue) {
+		byte[] data = new byte[4];
+		
+		data[0] = (byte) (uValue & 0xff);
+		data[1] = (byte) ((uValue >>8) & 0xff);
+		data[2] = (byte) ((uValue >>16) & 0xff);
+		data[3] = (byte) ((uValue >>24) & 0xff);
+		fsuipc_wrapper.WriteData(memory,4,data);
+	}
+	
+	public void writeLong(int memory, int uValue) {
+		byte[] data = new byte[6];
+		
+		data[0] = (byte) (uValue & 0xff);
+		data[1] = (byte) ((uValue >>8) & 0xff);
+		data[2] = (byte) ((uValue >>16) & 0xff);
+		data[3] = (byte) ((uValue >>24) & 0xff);
+		data[4] = (byte) ((uValue >>32) & 0xff);
+		data[5] = (byte) ((uValue >>40) & 0xff);
+		fsuipc_wrapper.WriteData(memory,4,data);
+	}
+
 
 }
