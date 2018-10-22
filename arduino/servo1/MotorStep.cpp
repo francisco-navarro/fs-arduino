@@ -55,14 +55,14 @@ void MotorStep::move(byte params[]) {
       pinMode(nStepper+3, OUTPUT);
       int val = 0;
       analogRead(11);
-      while (val<61) {
+      while (val<56) {
         stepForward(nStepper);
         val=analogRead(11);
         val+=analogRead(11);
       }
       Serial.println("Set 0 ");
       val = 0;
-      while (val<900) {
+      while (val<200) {
         stepForward(nStepper);
         val=analogRead(10);
       }
@@ -79,7 +79,7 @@ void MotorStep::move(byte params[]) {
      if (s%10==0) {
         int val=analogRead(10);
         delay(2);
-        if(val>900 && adjust) {
+        if(val>210 && adjust) {
           int actual = position[nStepper]+s*symbol;
           int variant = 518 - (actual % 518);
           adjust = abs(variant) > 90;

@@ -52,5 +52,5 @@ void loop() {
 
 String reads() {
   // encoder1 -> read();
-  flaps -> read();
+  //flaps -> read();
 }

@@ -27,8 +27,8 @@ public class Main {
 		new IAS(arduino, fsui);
 		new VerticalSpeed(arduino, fsui);
 		new Attitude(arduino, fsui);
-		new Flaps(arduino, fsui);
-		//new Altimeter(arduino, fsui);
+		//new Flaps(arduino, fsui);
+		new Altimeter(arduino, fsui);
 		//new Nav(arduino, fsui);
 		
 		arduino.start();
