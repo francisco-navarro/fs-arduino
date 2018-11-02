@@ -15,10 +15,10 @@ void Encoder::read () {
   if ((encoder0PinALast == LOW) && (n == HIGH)) {
     if (digitalRead(encoder0PinB) == LOW) {
       encoder0Pos--;
-      sprintf(sbuffer, "[encoder1:-]", encoder0Pos);
+      sprintf(sbuffer, "[encoder%d:-]", encoder0PinA, encoder0Pos);
     } else {
       encoder0Pos++;
-      sprintf(sbuffer, "[encoder1:+]", encoder0Pos);
+      sprintf(sbuffer, "[encoder%d:+]", encoder0PinA, encoder0Pos);
     }
     //sprintf(sbuffer, "[encoder1:%d]", encoder0Pos);
     Serial.println(sbuffer);

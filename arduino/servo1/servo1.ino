@@ -18,7 +18,7 @@ byte params[8];
 void setup() {
   servo = new ServoCustom();
   motorStep = new MotorStep();
-  //encoder1 = new Encoder(3, 4);
+  encoder1 = new Encoder(30, 31);
   flaps = new Flaps(A1);
   Serial.begin(115200);
   Serial.println("ready");
@@ -51,6 +51,6 @@ void loop() {
 }
 
 String reads() {
-  // encoder1 -> read();
+  encoder1 -> read();
   //flaps -> read();
 }
