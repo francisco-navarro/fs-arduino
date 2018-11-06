@@ -3,6 +3,7 @@ package com.pakonat;
 import com.pakonat.avionics.Altimeter;
 import com.pakonat.avionics.Attitude;
 import com.pakonat.avionics.Flaps;
+import com.pakonat.avionics.HSI;
 import com.pakonat.avionics.IAS;
 import com.pakonat.avionics.VerticalSpeed;
 import com.pakonat.things.Nav;
@@ -25,12 +26,12 @@ public class Main {
 		fsui = new FSUI(prop);
 		
 		new IAS(arduino, fsui);
-		new VerticalSpeed(arduino, fsui);
-		new Attitude(arduino, fsui);
+		//new VerticalSpeed(arduino, fsui);
+		//new Attitude(arduino, fsui);
 		//new Flaps(arduino, fsui);
-		new Altimeter(arduino, fsui);
+		//new Altimeter(arduino, fsui);
 		//new Nav(arduino, fsui);
-		
+		new HSI(arduino, fsui);
 		arduino.start();
 	}
 

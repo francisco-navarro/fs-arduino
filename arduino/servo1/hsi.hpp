@@ -1,7 +1,6 @@
 #include <Math.h>
 class HSI {
   private:
-    int motor1 = 22;
     int motorStepM[4][4] =
       {
         {1, 1, 0, 0},
@@ -9,6 +8,7 @@ class HSI {
         {0, 0, 1, 1},
         {1, 0, 0, 1}
       };
+    int heading = 0;
   public: 
     HSI();
     void move(byte params[]);

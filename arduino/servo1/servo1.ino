@@ -3,11 +3,13 @@
 #include "MotorStep.hpp"
 #include "Encoder.hpp"
 #include "Flaps.hpp"
+#include "hsi.hpp"
 
 ServoCustom *servo;
 MotorStep *motorStep;
 Encoder *encoder1;
 Flaps *flaps;
+HSI *hsi;
 
 String input;
 int count = 0;
@@ -20,6 +22,7 @@ void setup() {
   motorStep = new MotorStep();
   encoder1 = new Encoder(30, 31);
   flaps = new Flaps(A1);
+  hsi = new HSI();
   Serial.begin(115200);
   Serial.println("ready");
   
@@ -33,8 +36,6 @@ void loop() {
    
     
     if(count > 0 && order !='\n') {
-
-      
   
       if (order == 'a') {
         servo->attachServo(count, params);
@@ -42,6 +43,8 @@ void loop() {
         servo->writeServo(count, params);
       } else if (order == 's') {
         motorStep->move(params);
+      } else if (order == 'h') {
+        hsi->move(params);
       }
       Serial.println("_");
     }

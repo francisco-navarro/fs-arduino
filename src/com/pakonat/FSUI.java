@@ -38,10 +38,14 @@ public class FSUI {
 	public short getShort(int position) {
 		return fsui.getShort(position);
 	} 
+	
+	public float getFloat(int position) {
+		return fsui.getFloat(position);
+	} 
 
-	public void write(int v) {
-		
-	}
+	public short readShort(int position) {
+		return fsui.getShort(position);
+	} 
 
 	public void writeShort(int memory, short uValue) {
 		byte[] data = new byte[2];
