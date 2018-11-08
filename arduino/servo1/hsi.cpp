@@ -18,24 +18,34 @@ HSI::HSI () {
   while(readswitch == 1) {
     readswitch = digitalRead(32);
     stepBackward(motor1);
-  };
-    digitalWrite(motor1,0);
-    digitalWrite(motor1+1, 0);
-    digitalWrite(motor1+2, 0);
-    digitalWrite(motor1+3, 0);
-  delay(50);
-
+  }
+    
+    
+  Serial.println("End Init HSI 1");
+  delay(250);
+  
   pinMode(motor2, OUTPUT);
   pinMode(motor2+1, OUTPUT);
   pinMode(motor2+2, OUTPUT);
   pinMode(motor2+3, OUTPUT);
   readswitch = 1;
+  
   while(readswitch == 1) {
     stepBackward(motor2);
     readswitch = digitalRead(32);
-  };
+  }
+
+    digitalWrite(motor1,0);
+    digitalWrite(motor1+1, 0);
+    digitalWrite(motor1+2, 0);
+    digitalWrite(motor1+3, 0);
+
+    digitalWrite(motor2,0);
+    digitalWrite(motor2+1, 0);
+    digitalWrite(motor2+2, 0);
+    digitalWrite(motor2+3, 0);
   
-   Serial.println("End Init HSI");
+   Serial.println("End Init HSI 2");
 }
 
 

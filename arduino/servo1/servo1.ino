@@ -22,8 +22,9 @@ void setup() {
   motorStep = new MotorStep();
   encoder1 = new Encoder(30, 31);
   flaps = new Flaps(A1);
-  hsi = new HSI();
-  Serial.begin(115200);
+    Serial.begin(115200);
+  //hsi = new HSI();
+
   Serial.println("ready");
   
 }
