@@ -15,9 +15,9 @@ public class HSI extends StepMotor {
 	
 	protected FSAircraft aircraft = new FSAircraft();
 	
-	protected short lastOBS = 0;
-	protected int lastDeviation = 90;
-	protected int lastHeading = 0;
+	public static short lastOBS = 0;
+	public static int lastDeviation = 90;
+	public static double lastHeading = 0;
 	
 	protected final static String NAME = "hsi";
 	
@@ -42,12 +42,13 @@ public class HSI extends StepMotor {
 		if(lastOBS!=actualOBS) {
 			lastOBS=actualOBS;
 		}
-		double factor = 360.0/(65536.0*65536);
+		double factor = 3600.0/(65536.0*65536);
 		
-		long heading =  Math.round(getUInt(0x0580)*factor);
+		double heading = Math.round(getUInt(0x0580)*factor)/10.0;
 		if(lastHeading!=heading) {
-			lastHeading=(int) heading;
-			writeHeading((int) heading);
+			System.out.println(heading);
+			lastHeading= heading;
+//			writeHeading((int) heading);
 		}
 		
 		writeDeviation(Math.round(fsui.getFloat(memoryCourseDeviation)/10));
@@ -97,24 +98,16 @@ public class HSI extends StepMotor {
 					(byte)(pos % 91 + 30),
 					(byte)(pos >= 91 ? 91 + 30 : 0)
 			};
-			sendData(data);
-			Thread.sleep(WRITE_TIMEOUT);
+//			sendData(data);
+//			Thread.sleep(WRITE_TIMEOUT);
 		}
 	}
 
-	public int getUInt(int aOffset)
+	public long getUInt(int aOffset)
 	{
-		ByteBuffer buf = ByteBuffer.allocate(4);
-		buf.order(ByteOrder.LITTLE_ENDIAN);
-		byte[] data = new byte[4];
-		fsuipc_wrapper.ReadData(aOffset,4,data);
-		
-		int x = java.nio.ByteBuffer.wrap(data).order(java.nio.ByteOrder.LITTLE_ENDIAN).getInt();
-		
-		System.out.println(data[0] + data[1]);
-	    return x;
-//		buf.put(data,0,4);
-//		return buf.getInt(0);
+		byte[] data = new byte[8];
+		fsuipc_wrapper.ReadData(aOffset,8,data);
+		long x = java.nio.ByteBuffer.wrap(data).order(java.nio.ByteOrder.LITTLE_ENDIAN).getLong();
+	    return x & 0xffffffffL;
 	}
-	
 }

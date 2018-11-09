@@ -46,6 +46,14 @@ public class FSUI {
 	public short readShort(int position) {
 		return fsui.getShort(position);
 	} 
+	
+	public long readU32(int aOffset)
+	{
+		byte[] data = new byte[8];
+		fsuipc_wrapper.ReadData(aOffset,8,data);
+		long x = java.nio.ByteBuffer.wrap(data).order(java.nio.ByteOrder.LITTLE_ENDIAN).getLong();
+	    return x & 0xffffffffL;
+	}
 
 	public void writeShort(int memory, short uValue) {
 		byte[] data = new byte[2];

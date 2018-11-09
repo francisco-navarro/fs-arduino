@@ -6,6 +6,7 @@ import com.pakonat.avionics.Flaps;
 import com.pakonat.avionics.HSI;
 import com.pakonat.avionics.IAS;
 import com.pakonat.avionics.VerticalSpeed;
+import com.pakonat.http.Server;
 import com.pakonat.things.Nav;
 import com.pakonat.things.Servo;
 import com.pakonat.util.PropertiesReader;
@@ -33,6 +34,7 @@ public class Main {
 		//new Nav(arduino, fsui);
 		new HSI(arduino, fsui);
 		arduino.start();
+		Server.main(null);
 	}
 
 }
