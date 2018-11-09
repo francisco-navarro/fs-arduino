@@ -36,7 +36,7 @@ public class Attitude extends Servo{
 		
 		// El 90 y el 86 son los puntos 0
 		int degreesP = (int) Math.round((pitch * 1) + 90);
-		int degreesB = (int) Math.round((bank * 1.4) + 86);
+		int degreesB = (int) Math.round((bank * 1.4) + 102);
 		
 		
 		writeServo(PITCH_PORT, degreesP);

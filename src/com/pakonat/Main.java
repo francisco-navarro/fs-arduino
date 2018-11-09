@@ -27,11 +27,11 @@ public class Main {
 		fsui = new FSUI(prop);
 		
 		new IAS(arduino, fsui);
-		//new VerticalSpeed(arduino, fsui);
-		//new Attitude(arduino, fsui);
-		//new Flaps(arduino, fsui);
+		new VerticalSpeed(arduino, fsui);
+//		new Flaps(arduino, fsui);
 		//new Altimeter(arduino, fsui);
 		//new Nav(arduino, fsui);
+		new Attitude(arduino, fsui);
 		new HSI(arduino, fsui);
 		arduino.start();
 		Server.main(null);

@@ -46,7 +46,7 @@ public class HSI extends StepMotor {
 		
 		double heading = Math.round(getUInt(0x0580)*factor)/10.0;
 		if(lastHeading!=heading) {
-			System.out.println(heading);
+			
 			lastHeading= heading;
 //			writeHeading((int) heading);
 		}
