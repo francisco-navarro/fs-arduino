@@ -31,7 +31,7 @@ public class Attitude extends Servo{
 		
 		
 		double pitch = aircraft.Pitch() * -1;
-		double bank = aircraft.Bank() *-1;
+		double bank = aircraft.Bank() ;
 		// Viene en grados, 40 maximo, -40 minimo
 		
 		// El 90 y el 86 son los puntos 0

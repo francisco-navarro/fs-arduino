@@ -48,6 +48,7 @@ void MotorStep::move(byte params[]) {
     //Serial.println(n);
      
     if (!position[nStepper]) {
+      Serial.print(nStepper);
       Serial.println(" setting positions pins ");
       pinMode(nStepper, OUTPUT);
       pinMode(nStepper+1, OUTPUT);
@@ -55,10 +56,12 @@ void MotorStep::move(byte params[]) {
       pinMode(nStepper+3, OUTPUT);
       int val = 0;
       analogRead(11);
-      while (val<56) {
+      while (val<76) {
         stepForward(nStepper);
         val=analogRead(11);
         val+=analogRead(11);
+         Serial.print("Read ir ");
+         Serial.println(val);
       }
       Serial.println("Set 0 ");
       val = 0;
@@ -79,11 +82,11 @@ void MotorStep::move(byte params[]) {
      if (s%10==0) {
         int val=analogRead(10);
         delay(2);
-        if(val>210 && adjust) {
+        if(val>210 && adjust && position[nStepper] > 400) {
           int actual = position[nStepper]+s*symbol;
           int variant = 518 - (actual % 518);
           adjust = abs(variant) > 90;
-          if (adjust) {
+          if (adjust && false) {
             Serial.print(symbol>0 ? "ascendente" : "descendente" );
             Serial.print(" Position ");
             Serial.print(position[nStepper]+s*symbol);
