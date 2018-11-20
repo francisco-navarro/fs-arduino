@@ -4,12 +4,14 @@
 #include "Encoder.hpp"
 #include "Flaps.hpp"
 #include "hsi.hpp"
+#include "Nav1.hpp"
 
 ServoCustom *servo;
 MotorStep *motorStep;
 Encoder *encoder1;
 Flaps *flaps;
 HSI *hsi;
+Nav1 *nav1;
 
 String input;
 int count = 0;
@@ -22,6 +24,7 @@ void setup() {
   motorStep = new MotorStep();
   encoder1 = new Encoder(30, 31);
   flaps = new Flaps(A1);
+  nav1 = new Nav1(38);
     Serial.begin(115200);
   //hsi = new HSI();
 
@@ -46,6 +49,8 @@ void loop() {
         motorStep->move(params);
       } else if (order == 'h') {
         hsi->move(params);
+      } else if (order === 'n') {
+        
       }
       Serial.println("_");
     }
