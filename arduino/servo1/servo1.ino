@@ -40,6 +40,7 @@ void loop() {
    
     
     if(count > 0 && order !='\n') {
+
   
       if (order == 'a') {
         servo->attachServo(count, params);
@@ -49,8 +50,8 @@ void loop() {
         motorStep->move(params);
       } else if (order == 'h') {
         hsi->move(params);
-      } else if (order === 'n') {
-        
+      } else if (order == 'n') {
+        nav1->send(count, params);
       }
       Serial.println("_");
     }

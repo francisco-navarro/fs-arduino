@@ -5,8 +5,8 @@ class Nav1 {
     int count = 0;
     LedControl *lc;
     char cadena[8];
-    String cadena2;
     int amount = 253;
   public: 
     Nav1(int pin);
+    void send(int count, byte params[]);
 };

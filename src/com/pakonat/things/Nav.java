@@ -9,6 +9,7 @@ import com.pakonat.FSUI;
 
 public class Nav extends Thing {
 	
+	protected static byte WRITE_TO = 110;
 	protected int memory = Integer.parseInt("311E", 16);
 	protected FSNavRadio nav;
 
@@ -21,6 +22,22 @@ public class Nav extends Thing {
 
 	@Override
 	public void init() throws Exception {
+		short uValue = fsui.getShort(memory);
+		short value = fromUnsigned(uValue);
+		System.out.println(value);
+		send(value);
+	}
+	
+	public void send(short value) throws InterruptedException {
+		short value2 = (short) (value - 1000);
+		byte[] data = {
+				WRITE_TO,
+				'1',
+				'1',
+				(byte)value2
+		};
+		sendData(data);
+		sendData("\n".getBytes());
 	}
  
 	@Override
