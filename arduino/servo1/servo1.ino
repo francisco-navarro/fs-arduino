@@ -9,6 +9,7 @@
 ServoCustom *servo;
 MotorStep *motorStep;
 Encoder *encoder1;
+Encoder *encoder41;
 Flaps *flaps;
 HSI *hsi;
 Nav1 *nav1;
