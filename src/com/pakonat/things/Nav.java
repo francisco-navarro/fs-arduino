@@ -80,9 +80,9 @@ public class Nav extends Thing {
 	@Override
 	public void receiveEvent(String str) throws Exception {
 		if (str.indexOf("encoder" +encoder1) != -1) {
-			changeFreq(str, 0, 10);
-		} else if (str.indexOf("encoder" +encoder1) != -1) {
-			changeFreq(str, 0, 1);
+			changeFreq(str, 0, 5);
+		} else if (str.indexOf("encoder" +encoder2) != -1) {
+			changeFreq(str, 0, 100);
 		}
 	}
 
@@ -91,11 +91,11 @@ public class Nav extends Thing {
 		short value = fromUnsigned(uValue);
 		
 		if (str.indexOf("+") != -1) {
-			uValue -=5;
-			value -=5;
+			uValue +=multiplier;
+			value +=multiplier;
 		} else if (str.indexOf("-") != -1) {
-			uValue +=5;
-			value +=5;
+			uValue -=multiplier;
+			value -=multiplier;
 		}
 		short newValue = toUnsigned(value);
 		System.out.println(fromUnsigned(newValue));
