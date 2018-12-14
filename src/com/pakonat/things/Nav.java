@@ -17,6 +17,10 @@ public class Nav extends Thing {
 			Integer.parseInt("034E", 16) // com1 
 	};
 	protected FSNavRadio nav;
+	protected final int encoder1 = 41;
+	protected final int encoder2 = 43;
+	protected char encoder1Str[] = {' ', ' ', ' '};
+	protected char encoder2Str[] = {' ', ' ', ' '};
 	
 	private final short ZERO = 0;
 	
@@ -75,22 +79,28 @@ public class Nav extends Thing {
 	
 	@Override
 	public void receiveEvent(String str) throws Exception {
-		if (str.indexOf("encoder") != -1) {
-//			short uValue = fsui.getShort(memory);
-//			short value = fromUnsigned(uValue);
-//			
-//			if (str.indexOf("+") != -1) {
-//				uValue +=5;
-//				value +=5;
-//			} else if (str.indexOf("-") != -1) {
-//				uValue -=5;
-//				value -=5;
-//			}
-//			short newValue = toUnsigned(value);
-//			System.out.println(fromUnsigned(newValue));
-//			
-//			fsui.writeShort(memory, newValue);
+		if (str.indexOf("encoder" +encoder1) != -1) {
+			changeFreq(str, 0, 10);
+		} else if (str.indexOf("encoder" +encoder1) != -1) {
+			changeFreq(str, 0, 1);
 		}
+	}
+
+	private void changeFreq(String str, int index, int multiplier) {
+		short uValue = fsui.getShort(memoryNav[index]);
+		short value = fromUnsigned(uValue);
+		
+		if (str.indexOf("+") != -1) {
+			uValue -=5;
+			value -=5;
+		} else if (str.indexOf("-") != -1) {
+			uValue +=5;
+			value +=5;
+		}
+		short newValue = toUnsigned(value);
+		System.out.println(fromUnsigned(newValue));
+		
+		fsui.writeShort(memoryNav[index], newValue);
 	}
 
 	private short toUnsigned(short value) {

@@ -10,6 +10,7 @@ ServoCustom *servo;
 MotorStep *motorStep;
 Encoder *encoder1;
 Encoder *encoder41;
+Encoder *encoder43;
 Flaps *flaps;
 HSI *hsi;
 Nav1 *nav1;
@@ -24,6 +25,8 @@ void setup() {
   servo = new ServoCustom();
   motorStep = new MotorStep();
   encoder1 = new Encoder(30, 31);
+  encoder41 = new Encoder(41, 42);
+  encoder43 = new Encoder(43, 44);
   flaps = new Flaps(A1);
   nav1 = new Nav1(38);
     Serial.begin(115200);
@@ -63,5 +66,7 @@ void loop() {
 
 String reads() {
   encoder1 -> read();
+  encoder41 -> read();
+  encoder43 -> read();
   //flaps -> read();
 }

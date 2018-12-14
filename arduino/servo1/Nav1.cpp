@@ -23,8 +23,8 @@ void Nav1::send(int count, byte params[]) {
   if (count == 4) {
     if (params[1] == '1') {
       Serial.println("Changing nav1 s");
-      int num = params[2];
-      int num2 = params[3];
+      int num = 0 + params[2];
+      int num2 = 0 + params[3];
       itoa((int)params[2], cstr, 10);
 
 
@@ -37,10 +37,15 @@ void Nav1::send(int count, byte params[]) {
         lc->setChar(2, 2, cstr[0], true);
       }
 
-
+      Serial.println(params[3]);
       itoa((int)params[3], cstr, 10);
+      if((int)params[3] < 9) {
+        cstr[1] = cstr[0];
+        cstr[0] = '0';
+      }
       lc->setChar(2, 1, cstr[0], false);
       lc->setChar(2, 0, cstr[1], false);
+      
     } else if (params[1] == '2') {
       Serial.println("Changing nav1 s");
       int num = params[2];
